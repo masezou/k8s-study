@@ -7,10 +7,15 @@ How to use....
 
 Prepare following environment
 Ubuntu 20.04.1 amd64 with 2vCPU 8GB RAM 30GB HDD with Internet Connection
+
 login ubuntu server
+
 sudo -i
+
 git clone this
+
 run scripts 0-minio.sh: Minio Object Storage environment run MINIO_ACCESS_KEY=minioadmin MINIO_SECRET_KEY=minioadmin /usr/local/bin/minio server /minio/data&
+
 1-buildk8s.sh: Building KIND cluster
 
 2-storage.sh: Install CSI hostpath environment
