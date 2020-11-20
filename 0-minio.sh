@@ -26,8 +26,24 @@ mv cert.pem ~/.minio/certs/public.crt
 mv key.pem ~/.minio/certs/private.key
 cd
 
+### add minio to systemctl 
+cat <<EOT >> /etc/default/minio
+# Volume to be used for MinIO server.
+MINIO_VOLUMES="/minio/data"
+# Use if you want to run MinIO on a custom port.
+MINIO_OPTS="--address :9000"
+# Access Key of the server.
+MINIO_ACCESS_KEY=minioadmin
+# Secret key of the server.
+MINIO_SECRET_KEY=minioadmin
+
+EOT
+( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
+sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
+systemctl enable --now minio.service
+
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
-echo "MINIO_ACCESS_KEY=minioadmin MINIO_SECRET_KEY=minioadmin /usr/local/bin/minio server /minio/data"
+echo "There is no action."
 

@@ -36,9 +36,15 @@ curl -O https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 bash ./get-helm-3
 helm version
 rm get-helm-3
+helm completion bash > /etc/bash_completion.d/helm
+source /etc/bash_completion.d/helm
 fi
 
 # Bulding Kind Cluster
 kind create cluster --name k10-demo --image kindest/node:v1.18.2 --wait 600s
 kind get kubeconfig > kubeconfig.yaml
 
+echo ""
+echo "*************************************************************************************"
+echo "Next Step"
+echo "There is no action."
