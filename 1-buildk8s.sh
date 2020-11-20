@@ -41,8 +41,9 @@ source /etc/bash_completion.d/helm
 fi
 
 # Bulding Kind Cluster
-kind create cluster --name k10-demo --image kindest/node:v1.18.2 --wait 600s
-kind get kubeconfig > kubeconfig.yaml
+#kind create cluster --name k10-demo --image kindest/node:v1.18.2 --wait 600s
+kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.18.2 --wait 600s
+kind get kubeconfig --name k10-demo  > kubeconfig.yaml
 
 echo ""
 echo "*************************************************************************************"
