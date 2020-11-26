@@ -25,5 +25,5 @@ echo "If you faced error"
 echo "re-run staffold run"
 echo
 echo "Next Step"
-echo "kubectl port-forward deployment/frontend 8080:8080"
+echo "kubectl port-forward --address 0.0.0.0 deployment/frontend 8081:8080"
 echo "https://IPaddress:8081"
