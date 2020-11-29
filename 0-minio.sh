@@ -12,6 +12,7 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 apt -y install unzip
 unzip awscliv2.zip
 sudo ./aws/install
+rm -rf aws awscliv2.zip
 echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/aws
 chmod 755 /etc/profile.d/aws
 fi
