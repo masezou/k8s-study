@@ -7,16 +7,27 @@ else
     echo "I am root user."
 fi
 
+if [ ! -f /usr/local/bin/aws ]; then
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+apt -y install unzip
+unzip awscliv2.zip
+sudo ./aws/install
+echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/aws
+chmod 755 /etc/profile.d/aws
+fi
+
+
 cd
+if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data
 chown minio-user:minio-user /minio
 mkdir -p ~/.mini/certso
 cd /minio
-if [ ! -f /usr/local/bin/minio ]; then
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
 fi
+
 apt install -y golang-go
 curl -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
@@ -41,6 +52,9 @@ EOT
 ( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
+
+aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
+aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
 
 echo ""
 echo "*************************************************************************************"
