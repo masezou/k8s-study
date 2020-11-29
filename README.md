@@ -1,6 +1,8 @@
 # k8s-study
 kubernates learning with single machine
 
+(This is developent tree....)
+
 These scriput is use KIND simple K8s environment. I have tested only Linux environment.
 
 How to use....
