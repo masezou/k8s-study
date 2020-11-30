@@ -74,7 +74,7 @@ aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
 
 echo ""
 echo "*************************************************************************************"
-echo "minio and bucket:backupcasten was created"
+echo "minio and bucket:backupkasten was created"
 echo "Next Step"
 echo "There is no action."
 
