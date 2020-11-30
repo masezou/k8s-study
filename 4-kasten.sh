@@ -29,6 +29,12 @@ helm install k10 kasten/k10 --namespace=kasten-io
 kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
     k10.kasten.io/is-snapshot-class=true
 
+#Wordpress/MySQL backup
+kubectl --namespace kasten-io apply -f \
+    https://raw.githubusercontent.com/kanisterio/kanister/0.43.0/examples/stable/mysql/mysql-blueprint.yaml
+kubectl --namespace wordpress annotate deployment/mysql \
+    kanister.kasten.io/blueprint=mysql-blueprint
+
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"

@@ -9,7 +9,7 @@ fi
 
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
-curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
+curl -s -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
 kind completion bash > /etc/bash_completion.d/kind
@@ -32,7 +32,7 @@ fi
 
 # Install Helm
 if [ ! -f /usr/local/bin/helm ]; then
-curl -O https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+curl -s -O https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 bash ./get-helm-3
 helm version
 rm get-helm-3

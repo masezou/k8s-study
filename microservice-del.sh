@@ -1,0 +1,1 @@
+skaffold -n microservice delete

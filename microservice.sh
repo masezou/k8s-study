@@ -17,7 +17,8 @@ fi
 
 git clone https://github.com/GoogleCloudPlatform/microservices-demo.git -b release/v0.2.1 --depth 1
 cd microservices-demo
-skaffold run
+kubectl create namespace microservice
+skaffold -n microservice run
 
 echo ""
 echo "*************************************************************************************"

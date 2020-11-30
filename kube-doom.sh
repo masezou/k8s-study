@@ -5,7 +5,8 @@ namespace/kubedoom created
 deployment.apps/kubedoom created
 serviceaccount/kubedoom created
 clusterrolebinding.rbac.authorization.k8s.io/kubedoom created
-
+cd ..
+rm -rf kubedoom
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"

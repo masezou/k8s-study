@@ -8,13 +8,12 @@ else
 fi
 
 if [ ! -f /usr/local/bin/aws ]; then
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -s -o "awscliv2.zip"
 apt -y install unzip
-unzip awscliv2.zip
+unzip -q awscliv2.zip
 sudo ./aws/install
 rm -rf aws awscliv2.zip
-echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/aws
-chmod 755 /etc/profile.d/aws
+echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/awscli.sh
 fi
 
 
@@ -30,7 +29,7 @@ mv minio  /usr/local/bin/
 fi
 
 apt install -y golang-go
-curl -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
+curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
 go run generate_cert.go -ca --host $IPADDR
 unset IPADDR
@@ -59,6 +58,7 @@ aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
 
 echo ""
 echo "*************************************************************************************"
+echo "minio and bucket:backupcasten was created"
 echo "Next Step"
 echo "There is no action."
 

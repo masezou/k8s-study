@@ -16,6 +16,7 @@ case "$yn" in
  echo
  echo
  kind delete cluster --name k10-demo
+ kind delete cluster --name k10-demo-dr
  kind get clusters
  ;;
   *) echo "abort";;
