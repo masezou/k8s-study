@@ -43,9 +43,9 @@ fi
 # Bulding Kind Cluster
 #kind create cluster --name k10-demo --image kindest/node:v1.18.2 --wait 600s
 kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.18.2 --wait 600s
-kind get kubeconfig --name k10-demo  > kubeconfig-k10-demo.yaml
+kind get kubeconfig --name k10-demo  > ~/kubeconfig-k10-demo.yaml
 kind create cluster --config multi-node.yaml --name k10-demo-dr --image kindest/node:v1.18.2 --wait 600s
-kind get kubeconfig --name k10-demo-dr  > kubeconfig-k10-demo-dr.yaml
+kind get kubeconfig --name k10-demo-dr  > ~/kubeconfig-k10-demo-dr.yaml
 
 kubectl config get-contexts
 kubectl config use-context kind-k10-demo
