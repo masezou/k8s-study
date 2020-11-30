@@ -35,7 +35,8 @@ kubectl patch storageclass standard \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 kubectl patch storageclass csi-hostpath-sc \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
-cd
+cd ..
+mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 kubectl get sc
 
 echo ""
