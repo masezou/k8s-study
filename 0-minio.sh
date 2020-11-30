@@ -21,20 +21,23 @@ cd
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data
 chown minio-user:minio-user /minio
-mkdir -p ~/.mini/certso
+mkdir -p ~/.minio/certs
 cd /minio
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
 fi
 
-apt install -y golang-go
+apt update
+apt -y install golang-go
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
 go run generate_cert.go -ca --host $IPADDR
 unset IPADDR
 mv cert.pem ~/.minio/certs/public.crt
+chmod 600 ~/.minio/certs/public.crt
 mv key.pem ~/.minio/certs/private.key
+chmod 600 ~/.minio/certs/private.key
 cd
 
 ### add minio to systemctl 
@@ -52,6 +55,19 @@ EOT
 ( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
+
+mkdir ~/.aws
+cat <<'EOF' >>~/.aws/config
+[profile minio]
+region = us-east-1
+output = json
+EOF
+cat <<'EOF' >>~/.aws/credentials
+[minio]
+aws_access_key_id= minioadmin
+aws_secret_access_key= minioadmin
+EOF
+chmod 600 ~/.aws/*
 
 aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
 aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
