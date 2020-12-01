@@ -30,7 +30,9 @@ If you want to wipeout wordpress, run X-delete-wordpress.sh. If you want to dele
 
 Additional Note:
  multi-node.yaml: KIND configuration with 3 docker node. This release is deploy 3 node
+ 
  kube-doom.sh: Doom on Kind/Kubernates (https://github.com/storax/kubedoom)
+ 
  microservice.sh: Microservice demo site (https://github.com/GoogleCloudPlatform/microservices-demo/tree/release/v0.2.1)
 
 
