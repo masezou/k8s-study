@@ -33,3 +33,5 @@ Additional Note:
  kube-doom.sh: Doom on Kind/Kubernates (https://github.com/storax/kubedoom)
  microservice.sh: Microservice demo site (https://github.com/GoogleCloudPlatform/microservices-demo/tree/release/v0.2.1)
 
+
+Note: Application backup was implemented in mysqldump
