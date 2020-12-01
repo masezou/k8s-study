@@ -15,6 +15,19 @@ sudo ./aws/install
 rm -rf aws awscliv2.zip
 echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/awscli.sh
 cd
+mkdir ~/.aws
+cat <<'EOF' >>~/.aws/config
+[profile minio]
+region = us-east-1
+output = json
+EOF
+cat <<'EOF' >>~/.aws/credentials
+[minio]
+aws_access_key_id= minioadmin
+aws_secret_access_key= minioadmin
+EOF
+chmod 600 ~/.aws/*
+cd
 fi
 
 if [ ! -f /usr/local/bin/minio ]; then
@@ -45,8 +58,10 @@ mv key.pem ~/.minio/certs/private.key
 chmod 600 ~/.minio/certs/private.key
 cd
 
- if [ ! -f /etc/default/minio ]; then
-### add minio to systemctl 
+### add minio to systemctl
+if [ ! -f /etc/systemd/system/minio.service ]; then
+
+if [ ! -f /etc/default/minio ]; then
 cat <<EOT > /etc/default/minio
 # Volume to be used for MinIO server.
 MINIO_VOLUMES="/minio/data"
@@ -59,26 +74,13 @@ MINIO_SECRET_KEY=minioadmin
 EOT
 fi
 
-if [ ! -f /etc/systemd/system/minio.service ]; then
 ( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
+aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
 fi
 
-mkdir ~/.aws
-cat <<'EOF' >>~/.aws/config
-[profile minio]
-region = us-east-1
-output = json
-EOF
-cat <<'EOF' >>~/.aws/credentials
-[minio]
-aws_access_key_id= minioadmin
-aws_secret_access_key= minioadmin
-EOF
-chmod 600 ~/.aws/*
-
-aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
+systemctl status minio.service --no-pager
 aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
 
 echo ""
