@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+if [ ${EUID:-${UID}} != 0 ]; then
+    echo "This script must be run as root"
+    exit 1
+else
+    echo "I am root user."
+fi
+
 kubectl get node
 kind get clusters
 result=$?
@@ -16,6 +23,7 @@ case "$yn" in
  echo
  echo
  kind delete cluster --name k10-demo
+ kind delete cluster --name k10-demo-dr
  kind get clusters
  ;;
   *) echo "abort";;
