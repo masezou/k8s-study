@@ -7,7 +7,7 @@ else
     echo "I am root user."
 fi
 
-git clone https://github.com/storax/kubedoom
+git clone https://github.com/storax/kubedoom --depth 1
 cd kubedoom
 kubectl apply -f manifest/
 namespace/kubedoom created

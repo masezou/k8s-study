@@ -26,7 +26,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${SNAPSHOTTER_VERSION}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
 
 ##Install the CSI Hostpath Driver
-git clone https://github.com/kubernetes-csi/csi-driver-host-path.git
+git clone https://github.com/kubernetes-csi/csi-driver-host-path.git --depth 1
 cd csi-driver-host-path
 ./deploy/kubernetes-1.18/deploy.sh
 kubectl apply -f ./examples/csi-storageclass.yaml
