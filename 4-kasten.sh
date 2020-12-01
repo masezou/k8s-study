@@ -21,6 +21,9 @@ helm version
 fi
 
 # Install Kasten
+
+curl https://docs.kasten.io/tools/k10_primer.sh | bash
+
 helm repo add kasten https://charts.kasten.io/
 helm repo update
 kubectl create namespace kasten-io
