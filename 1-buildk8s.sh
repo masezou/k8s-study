@@ -18,13 +18,12 @@ fi
 
 # Install kubectl
 if [ ! -f /usr/bin/kubectl ]; then
+apt update
 apt -y install docker.io apt-transport-https gnupg2 curl
 systemctl enable --now docker
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-apt update
 apt -y install kubectl
-apt clean
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc

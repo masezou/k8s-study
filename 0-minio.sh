@@ -9,6 +9,7 @@ fi
 
 if [ ! -f /usr/local/bin/aws ]; then
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -s -o "awscliv2.zip"
+apt update
 apt -y install unzip
 unzip -q awscliv2.zip
 sudo ./aws/install
@@ -42,7 +43,6 @@ cd
 fi
 
 if [ ! -f /usr/bin/go ]; then
-apt update
 apt -y install golang-go
 cd
 fi
