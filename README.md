@@ -16,9 +16,9 @@ sudo -i
 
 git clone this
 
-run scripts 0-minio.sh: Minio Object Storage environment run MINIO_ACCESS_KEY=minioadmin MINIO_SECRET_KEY=minioadmin /usr/local/bin/minio server /minio/data&
+run scripts 0-minio.sh: running mino with systemd
 
-1-buildk8s.sh: Building KIND cluster
+1-buildk8s.sh: Building KIND cluster (2 cluster have each 3 nodes)
 
 2-storage.sh: Install CSI hostpath environment
 
