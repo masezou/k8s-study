@@ -15,15 +15,17 @@ git clone this
 
 run following scripts
 
-0-minio.sh: Minio Object Storage environment
+0-minio.sh: Minio Object Storage environment (If you don't have object storage and starting minio with systemd)
 
-1-buildk8s.sh: Building KIND cluster
+1-buildk8s.sh: Building KIND cluster (This script will deploy single node KIND cluster)
 
-2-storage.sh: Install CSI hostpath environment
+2-storage.sh: Install CSI hostpath environment (This script will deploy CSI hostpath driver)
 
 3-wordpress.sh: Deploy wordpress blog site run kubectl port-forward --address 0.0.0.0 svc/wordpress 80:80 -n wordpres&
+Then access http://your Kind host ip(Ubuntu IP)/ , configure wordpress blog.
 
 4-kasten.sh: Deploy K10 run kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000&
+Then access https://your Kind host ip(Ubuntu IP):8080/k10/#/ . configure Kasten for wordpress backup
 
 If you want to wipeout wordpress, run X-delete-wordpress.sh. 
 If you want to delete KIND cluster, run Y-delete-kind-cluster.sh. You can re-start from 1-buildk8s.sh
