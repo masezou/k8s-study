@@ -6,7 +6,7 @@ These scriput is use KIND simple K8s environment. I have tested only Linux envir
 How to use....
 
 Prepare following environment
-Ubuntu 20.04.1 amd64 with 2vCPU 8GB RAM 30GB HDD with Internet Connection
+Ubuntu 20.04.1 amd64 with 2vCPU 8GB RAM 100GB HDD with Internet Connection
 
 login ubuntu server
 
