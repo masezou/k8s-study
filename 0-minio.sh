@@ -15,6 +15,7 @@ unzip -q awscliv2.zip
 sudo ./aws/install
 rm -rf aws awscliv2.zip
 echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/awscli.sh
+source /etc/bash_completion
 cd
 mkdir ~/.aws
 cat <<'EOF' >>~/.aws/config
@@ -44,6 +45,12 @@ fi
 
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
+echo "export GOPATH=$HOME/go" >>/etc/profile
+echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
+export GOPATH=$HOME/go
+export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
+#go get -u github.com/posener/complete/gocomplete
+#$GOPATH/gocomplete -install -y  
 cd
 fi
 
@@ -77,7 +84,7 @@ fi
 ( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
-aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
+#aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
 fi
 
 systemctl status minio.service --no-pager

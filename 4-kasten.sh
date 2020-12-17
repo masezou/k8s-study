@@ -7,6 +7,7 @@ apt -y install docker.io apt-transport-https gnupg2 curl
 systemctl enable --now docker
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+apt update
 apt -y install kubectl
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
@@ -21,11 +22,10 @@ helm version
 fi
 
 # Install Kasten
-
-curl https://docs.kasten.io/tools/k10_primer.sh | bash
-
 helm repo add kasten https://charts.kasten.io/
 helm repo update
+curl https://docs.kasten.io/tools/k10_primer.sh | bash
+rm k10primer.yaml
 kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io
 
