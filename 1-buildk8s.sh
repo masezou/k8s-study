@@ -38,6 +38,8 @@ helm version
 rm get-helm-3
 helm completion bash > /etc/bash_completion.d/helm
 source /etc/bash_completion.d/helm
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
 fi
 
 # Bulding Kind Cluster
