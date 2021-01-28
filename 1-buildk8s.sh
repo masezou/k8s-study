@@ -9,7 +9,7 @@ fi
 
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
-curl -s -Lo ./kind https://kind.sigs.k8s.io/dl/v0.9.0/kind-linux-amd64
+curl -s -Lo ./kind https://kind.sigs.k8s.io/dl/v0.10.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
 kind completion bash > /etc/bash_completion.d/kind
@@ -41,7 +41,7 @@ source /etc/bash_completion.d/helm
 fi
 
 # Bulding Kind Cluster
-kind create cluster --name k10-demo --image kindest/node:v1.18.2 --wait 600s
+kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
 #kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.18.2 --wait 600s
 #kind get kubeconfig --name k10-demo  > ~/kubeconfig-k10-demo.yaml
 #kind create cluster --config multi-node.yaml --name k10-demo-dr --image kindest/node:v1.18.2 --wait 600s
