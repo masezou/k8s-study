@@ -202,6 +202,7 @@ spec:
   selector:
     app: wordpress
 EOF
+apt -y install mysql-client
 kubectl create -f wordpress-service.yml -n wordpress
 kubectl get svc -l app=wordpress -n wordpress
 kubectl get pod -n wordpress
