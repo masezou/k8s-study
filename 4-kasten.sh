@@ -24,13 +24,15 @@ fi
 # Install Kasten
 helm repo add kasten https://charts.kasten.io/
 helm repo update
+
+kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
+    k10.kasten.io/is-snapshot-class=true
+
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io
 
-kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
-    k10.kasten.io/is-snapshot-class=true
 
 echo ""
 echo "*************************************************************************************"
