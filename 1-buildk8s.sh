@@ -42,6 +42,10 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 fi
 
+kubectl create namespace portainer
+kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer.yaml
+kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer
+
 # Bulding Kind Cluster
 kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.2 --wait 600s
@@ -56,4 +60,6 @@ kubectl config get-contexts
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
-echo "There is no action."
+echo "If you want to see portainer dashboard , execute following"
+echo "run kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer"
+echo "Open your browser https://your Kind host ip(Ubuntu IP):9001"
