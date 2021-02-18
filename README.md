@@ -30,9 +30,23 @@ run following scripts
 
 kube-doom.sh: Doom on Kubernates.
 
-Then access http://your Kind host ip(Ubuntu IP)/ , configure wordpress blog.
 
-Then access https://your Kind host ip(Ubuntu IP):8080/k10/#/ . configure Kasten for wordpress backup
+
+Minio
+
+ http://your Kind host ip(Ubuntu IP):9000
+
+Portainer
+
+http://your Kind host ip(Ubuntu IP):9001
+
+Wordpress
+
+http://your Kind host ip(Ubuntu IP)/
+
+Kasten
+
+https://your Kind host ip(Ubuntu IP):8080/k10/#/
 
 
 
