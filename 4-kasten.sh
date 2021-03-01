@@ -20,6 +20,14 @@ curl -O https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
 bash ./get-helm-3
 helm version
 fi
+# Install K10-tools
+curl -OL https://github.com/kastenhq/external-tools/releases/download/3.0.9/k10tools_3.0.9_linux_amd64
+mv k10tools_3.0.9_linux_amd64 /usr/local/bin/k10tools
+chmod +x /usr/local/bin/k10tools
+
+curl -OL https://github.com/kastenhq/external-tools/releases/download/3.0.9/k10multicluster_3.0.9_linux_amd64
+mv k10multicluster_3.0.9_linux_amd64 /usr/local/bin/k10multicluster
+chmod +x /usr/local/bin/k10multicluster
 
 # Install Kasten
 helm repo add kasten https://charts.kasten.io/
