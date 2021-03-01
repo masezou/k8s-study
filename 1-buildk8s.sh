@@ -54,9 +54,6 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 fi
 
-kubectl create namespace portainer
-kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer.yaml
-kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer
 
 # Bulding Kind Cluster
 kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
@@ -68,6 +65,10 @@ kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
 
 #kubectl config use-context kind-k10-demo
 kubectl config get-contexts
+
+kubectl create namespace portainer
+kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer.yaml
+kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer
 
 echo ""
 echo "*************************************************************************************"
