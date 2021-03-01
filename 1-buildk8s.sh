@@ -29,6 +29,18 @@ kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
+# Install kubecolor
+if [ ! -f /usr/bin/go ]; then
+apt -y install golang-go
+export GOPATH=$HOME/go
+echo "export GOPATH=$HOME/go" >>/etc/profile
+echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
+export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
+cd
+fi
+go get github.com/dty1er/kubecolor/cmd/kubecolor
+echo "alias kubectl=kubecolor" >> /etc/profile
+alias kubectl=kubecolor
 
 # Install Helm
 if [ ! -f /usr/local/bin/helm ]; then

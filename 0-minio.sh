@@ -45,9 +45,9 @@ fi
 
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
+export GOPATH=$HOME/go
 echo "export GOPATH=$HOME/go" >>/etc/profile
 echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
-export GOPATH=$HOME/go
 export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
 #go get -u github.com/posener/complete/gocomplete
 #$GOPATH/gocomplete -install -y  
