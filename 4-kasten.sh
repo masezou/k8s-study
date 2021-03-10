@@ -39,7 +39,7 @@ kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 kubectl create namespace kasten-io
-helm install k10 kasten/k10 --namespace=kasten-io
+helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
 
 
 echo ""
