@@ -22,16 +22,23 @@ helm version
 fi
 # Install K10-tools
 if [ ! -f /usr/local/bin/k10tools ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/3.0.9/k10tools_3.0.9_linux_amd64
-mv k10tools_3.0.9_linux_amd64 /usr/local/bin/k10tools
+curl -OL https://github.com/kastenhq/external-tools/releases/download/4.0.1/k10tools_4.0.1_linux_amd64
+mv k10tools_4.0.1_linux_amd64 /usr/local/bin/k10tools
 chmod +x /usr/local/bin/k10tools
 fi
 
-
 if [ ! -f /usr/local/bin/k10multicluster ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/3.0.9/k10multicluster_3.0.9_linux_amd64
-mv k10multicluster_3.0.9_linux_amd64 /usr/local/bin/k10multicluster
+curl -OL https://github.com/kastenhq/external-tools/releases/download/4.0.1/k10multicluster_4.0.1_linux_amd64
+mv k10multicluster_4.0.1_linux_amd64 /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
+fi
+
+if [ ! -f /usr/local/bin/kubestr ]; then
+curl -OL https://github.com/kastenhq/kubestr/releases/download/v0.4.16/kubestr-v0.4.16-linux-amd64.tar.gz
+tar xfz kubestr-v0.4.16-linux-amd64.tar.gz
+rm kubestr-v0.4.16-linux-amd64.tar.gz
+mv kubestr /usr/local/bin/kubestr
+chmod +x /usr/local/bin/kubestr
 fi
 
 # Install Kasten

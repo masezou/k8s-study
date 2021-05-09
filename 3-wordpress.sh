@@ -209,6 +209,7 @@ kubectl get pod -n wordpress
 cd ..
 kubectl get pod,pv,pvc -n wordpress
 mv wordpress wordpress-`date "+%Y%m%d_%H%M%S"`
+#apt-get install firefox firefox-locale-ja libgl1-mesa-glx
 
 echo ""
 echo "*************************************************************************************"
