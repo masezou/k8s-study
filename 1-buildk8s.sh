@@ -67,6 +67,27 @@ kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
 #kubectl config use-context kind-k10-demo
 kubectl config get-contexts
 
+#Install Metallb
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/master/manifests/namespace.yaml
+kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/master/manifests/metallb.yaml
+docker network inspect -f '{{.IPAM.Config}}' kind
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - 172.18.255.200-172.18.255.250
+EOF
+
+#Install portainer
 kubectl create namespace portainer
 kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer.yaml
 kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer
