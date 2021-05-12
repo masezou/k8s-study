@@ -57,7 +57,8 @@ fi
 
 
 # Bulding Kind Cluster
-kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
+kind create cluster --name k10-demo --image kindest/node:v1.19.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.2 --wait 600s
 #kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.18.2 --wait 600s
 #kind get kubeconfig --name k10-demo  > ~/kubeconfig-k10-demo.yaml
