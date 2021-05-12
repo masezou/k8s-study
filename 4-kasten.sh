@@ -53,6 +53,44 @@ rm k10primer.yaml
 kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
 
+# define NFS storage
+apt -y install nfs-common
+cat <<'EOF'> nfs-pv.yml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+   name: test-pv
+spec:
+   capacity:
+      storage: 10Gi
+   volumeMode: Filesystem
+   accessModes:
+      - ReadWriteMany
+   persistentVolumeReclaimPolicy: Recycle
+   storageClassName: nfs
+   mountOptions:
+      - hard
+      - nfsvers=4.0
+   nfs:
+      path: /Share/kasten_nfs
+      server: 192.168.10.4
+EOF
+#kubectl apply -f nfs-pv.yml
+
+cat <<'EOF'> nfs-pvc.yml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+   name: test-pvc
+spec:
+   storageClassName: nfs
+   accessModes:
+      - ReadWriteMany
+   resources:
+      requests:
+         storage: 10Gi
+EOF
+#kubectl apply -f nfs-pvc.yml
 
 echo ""
 echo "*************************************************************************************"
