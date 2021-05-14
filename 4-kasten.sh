@@ -8,7 +8,8 @@ systemctl enable --now docker
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 apt update
-apt -y install kubectl
+#apt -y install kubectl
+apt-get install kubectl=1.19.10-00
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
