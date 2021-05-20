@@ -9,7 +9,7 @@ fi
 
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
-curl -s -Lo ./kind https://kind.sigs.k8s.io/dl/v0.10.0/kind-linux-amd64
+curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.0/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
 kind completion bash > /etc/bash_completion.d/kind
@@ -25,7 +25,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 apt update
 #apt -y install kubectl
-apt-get install kubectl=1.19.10-00
+apt-get install kubectl=1.19.11-00
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
@@ -57,12 +57,12 @@ fi
 
 
 # Bulding Kind Cluster
-#kind create cluster --name k10-demo --image kindest/node:v1.18.15 --wait 600s
-kind create cluster --name k10-demo --image kindest/node:v1.19.7 --wait 600s
-#kind create cluster --name k10-demo --image kindest/node:v1.20.2 --wait 600s
-#kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.18.2 --wait 600s
+kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
+#kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind get kubeconfig --name k10-demo  > ~/kubeconfig-k10-demo.yaml
-#kind create cluster --config multi-node.yaml --name k10-demo-dr --image kindest/node:v1.18.2 --wait 600s
+#kind create cluster --config multi-node.yaml --name k10-demo-dr --image kindest/node:v1.19.11 --wait 600s
 #kind get kubeconfig --name k10-demo-dr  > ~/kubeconfig-k10-demo-dr.yaml
 
 #kubectl config use-context kind-k10-demo
