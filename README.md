@@ -20,13 +20,15 @@ run following scripts
 
 1-buildk8s.sh: Building KIND cluster (This script will deploy single node KIND cluster)
 
-2-storage.sh: Install CSI hostpath environment (This script will deploy CSI hostpath driver)
+2-storage.sh: Install CSI hostpath and dynamic nfs pvc environment  (This script will deploy CSI hostpath driver)
 
-3-wordpress.sh: Deploy wordpress blog site run kubectl port-forward --address 0.0.0.0 svc/wordpress 80:80 -n wordpres&
+3-wordpress.sh: Deploy wordpress blog site to host path
+
+3-nfs-wordpress.sh: Deploy wordpress blog site to nfs pv
 
 4-kasten.sh: Deploy K10 run kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000&
 
-5-service.sh: port-forearding wordpress and kasten.
+S-service.sh: port-forearding wordpress and kasten.
 
 kube-doom.sh: Doom on Kubernates.
 
