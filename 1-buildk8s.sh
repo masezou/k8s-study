@@ -55,6 +55,14 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 fi
 
+# Install Skaffold
+if [ ! -f /usr/local/bin/skaffold ]; then
+curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+install skaffold /usr/local/bin/
+rm skaffold
+skaffold completion bash >/etc/bash_completion.d/skaffold
+source /etc/bash_completion.d/skaffold
+fi
 
 # Bulding Kind Cluster
 kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
