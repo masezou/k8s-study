@@ -96,11 +96,6 @@ data:
       - 172.18.255.200-172.18.255.250
 EOF
 
-#Install portainer
-kubectl create namespace portainer
-kubectl apply -n portainer -f https://raw.githubusercontent.com/portainer/k8s/master/deploy/manifests/portainer/portainer.yaml
-kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer
-
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
