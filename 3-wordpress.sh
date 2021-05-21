@@ -142,7 +142,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5
+      storage: 5Gi
 EOF
 kubectl create -f wordpress-pvc.yml -n wordpress
 kubectl get pvc,pv
