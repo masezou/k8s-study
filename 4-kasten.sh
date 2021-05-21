@@ -59,7 +59,7 @@ kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true
 
 # define NFS storage
-cat <<EOF | kubectl apply -f -
+cat <<EOF | kubectl apply -n kasten-io -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
