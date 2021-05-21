@@ -98,6 +98,7 @@ EOF
 
 # NFS Storage
 apt -y install nfs-kernel-server
+if [ ! -f /etc/exports ]; then
 mkdir -p /nfsexport
 cat << EOF >> /etc/exports
 /nfsexport 192.168.0.0/16(rw,async,no_root_squash)
@@ -107,6 +108,7 @@ EOF
 systemctl restart nfs-server
 systemctl enable nfs-server
 showmount -e
+fi
 
 LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
