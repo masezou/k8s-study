@@ -25,22 +25,22 @@ fi
 TOOLSVER=4.0.2
 TOOLSARCH=linux_amd64
 if [ ! -f /usr/local/bin/k10tools ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_${TOOLSARCH}
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_${TOOLSARCH}
 mv k10tools_${TOOLSVER}_${TOOLSARCH} /usr/local/bin/k10tools
 chmod +x /usr/local/bin/k10tools
 fi
 
 if [ ! -f /usr/local/bin/k10multicluster ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_${TOOLSARCH}
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_${TOOLSARCH}
 mv k10multicluster_${TOOLSVER}_${TOOLSARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
 
 KUBESTRVER=0.4.16
 if [ ! -f /usr/local/bin/kubestr ]; then
-curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-${TOOLSARCH}.tar.gz
-tar xfz kubestr-v${KUBESTRVER}-${TOOLSARCH}.tar.gz
-rm kubestr-v${KUBESTRVER}-${TOOLSARCH}.tar.gz
+curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
+tar xfz kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
+rm kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
 mv kubestr /usr/local/bin/kubestr
 chmod +x /usr/local/bin/kubestr
 fi
@@ -55,46 +55,28 @@ kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 kubectl create namespace kasten-io
-helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
+#helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
+helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true
 
 # define NFS storage
-apt -y install nfs-common
-cat <<'EOF'> nfs-pv.yml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-   name: test-pv
-spec:
-   capacity:
-      storage: 10Gi
-   volumeMode: Filesystem
-   accessModes:
-      - ReadWriteMany
-   persistentVolumeReclaimPolicy: Recycle
-   storageClassName: nfs
-   mountOptions:
-      - hard
-      - nfsvers=4.0
-   nfs:
-      path: /Share/kasten_nfs
-      server: 192.168.10.4
-EOF
-#kubectl apply -f nfs-pv.yml
-
-cat <<'EOF'> nfs-pvc.yml
+cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-   name: test-pvc
+   name: kastenbackup-pvc
 spec:
-   storageClassName: nfs
+   storageClassName: nfs-client
    accessModes:
       - ReadWriteMany
    resources:
       requests:
-         storage: 10Gi
+         storage: 20Gi
 EOF
-#kubectl apply -f nfs-pvc.yml
+
+echo "Following is login token"
+sa_secret=$(kubectl get serviceaccount k10-k10 -o jsonpath="{.secrets[0].name}" --namespace kasten-io)
+kubectl get secret $sa_secret --namespace kasten-io -ojsonpath="{.data.token}{'\n'}" | base64 --decode
+echo
 
 echo ""
 echo "*************************************************************************************"
