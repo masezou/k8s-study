@@ -55,34 +55,10 @@ mkdir -p nfs-pv
 cd nfs-pv
 
 LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
-cat << EOF > nfs-pv.yml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-pv
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    # - ReadWriteMany- Multiple node RW
-    # - ReadWriteOnce - Single node RW)
-    # - ReadOnlyMany - Multiple node R
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy:
-    # Retain data if pod was deleted
-    Retain
-  nfs:
-    # NFS Server host and export
-    path: /nfsexport
-    server: ${LOCALIPADDR}
-    readOnly: false
-EOF
-
 helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
 helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
     --set nfs.server=${LOCALIPADDR} \
     --set nfs.path=/nfsexport
-
 
 echo ""
 echo "*************************************************************************************"
