@@ -6,7 +6,7 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
-
+LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
 curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.0/kind-linux-amd64
@@ -65,13 +65,44 @@ source /etc/bash_completion.d/skaffold
 fi
 
 # Bulding Kind Cluster
-kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
-#kind create cluster --config multi-node.yaml --name k10-demo --image kindest/node:v1.19.11 --wait 600s
-#kind get kubeconfig --name k10-demo  > ~/kubeconfig-k10-demo.yaml
-#kind create cluster --config multi-node.yaml --name k10-demo-dr --image kindest/node:v1.19.11 --wait 600s
-#kind get kubeconfig --name k10-demo-dr  > ~/kubeconfig-k10-demo-dr.yaml
+
+cat <<EOF | kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  # WARNING: It is _strongly_ recommended that you keep this the default
+  # (127.0.0.1) for security reasons. However it is possible to change this.
+  apiServerAddress: "${LOCALIPADDR}"
+  # By default the API server listens on a random open port.
+  # You may choose a specific port but probably don't need to in most cases.
+  # Using a random port makes it easier to spin up multiple clusters.
+  apiServerPort: 6443
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+
+#Ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
 
 #kubectl config use-context kind-k10-demo
 kubectl config get-contexts
@@ -96,30 +127,42 @@ data:
       - 172.18.255.200-172.18.255.250
 EOF
 
-# NFS Storage
-apt -y install nfs-kernel-server
-if [ ! -f /etc/exports ]; then
-mkdir -p /nfsexport
-cat << EOF >> /etc/exports
-/nfsexport 192.168.0.0/16(rw,async,no_root_squash)
-/nfsexport 172.16.0.0/12(rw,async,no_root_squash)
-/nfsexport 10.0.0.0/8(rw,async,no_root_squash)
+# metric server
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.7/components.yaml
+
+# Kuberntes Dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
 EOF
-systemctl restart nfs-server
-systemctl enable nfs-server
-showmount -e
-fi
+cat <<EOF | kubectl apply -f -
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kubernetes-dashboard
+EOF
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}" > dashboard.token
+echo "" >> dashboard.token
+cat dashboard.token 
 
-LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
-helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
-helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
-    --set nfs.server=${LOCALIPADDR} \
-    --set nfs.path=/nfsexport
-
+# Expoert kubeconfig
+kubectl config view --raw > Your_kubeconfig
+echo "" >>Your_kubeconfig
 
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
-echo "If you want to see portainer dashboard , execute following"
-echo "run kubectl port-forward --address 0.0.0.0 svc/portainer 9001:9000 -n portainer"
-echo "Open your browser https://your Kind host ip(Ubuntu IP):9001"
+echo "you can access Kubernetes dashboard with kubectl poroxy"
+echo " http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/"

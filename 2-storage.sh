@@ -37,6 +37,26 @@ kubectl patch storageclass csi-hostpath-sc \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 cd ..
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
+
+# NFS Storage
+apt -y install nfs-kernel-server
+if [ ! -f /etc/exports ]; then
+mkdir -p /nfsexport
+cat << EOF >> /etc/exports
+/nfsexport 192.168.0.0/16(rw,async,no_root_squash)
+/nfsexport 172.16.0.0/12(rw,async,no_root_squash)
+/nfsexport 10.0.0.0/8(rw,async,no_root_squash)
+EOF
+systemctl restart nfs-server
+systemctl enable nfs-server
+showmount -e
+fi
+
+helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+    --set nfs.server=${LOCALIPADDR} \
+    --set nfs.path=/nfsexport
+
 kubectl get sc
 
 echo ""
