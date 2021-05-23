@@ -1,10 +1,7 @@
 git clone https://github.com/storax/kubedoom
 cd kubedoom
 kubectl apply -f manifest/
-namespace/kubedoom created
-deployment.apps/kubedoom created
-serviceaccount/kubedoom created
-clusterrolebinding.rbac.authorization.k8s.io/kubedoom created
+cd ..
 mv kubedoom kubedoom-`date "+%Y%m%d_%H%M%S"`
 
 echo ""
