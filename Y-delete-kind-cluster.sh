@@ -27,6 +27,8 @@ case "$yn" in
  kind get clusters
  rm -rf Your_kubeconfig
  rm -rf dashboard.token
+ rm -rf k10-k10.token
+ rm -rf /nfsexport/*
  echo "you can re-create cluster with 1-buildk8s.sh"
  ;;
   *) echo "abort";;
