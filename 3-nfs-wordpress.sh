@@ -174,7 +174,7 @@ EOF
 apt -y install mysql-client
 kubectl create -f wordpress-service.yml -n wordpress-nfs
 kubectl get svc -l app=wordpress -n wordpress-nfs
-kubectl get pod -n wordpress
+kubectl get pod -n wordpres-nfs
 cd ..
 kubectl get pod,pvc -n wordpress-nfs
 mv wordpress-nfs wordpress-nfs-`date "+%Y%m%d_%H%M%S"`

@@ -25,6 +25,10 @@ case "$yn" in
  kubectl delete pvc mysql-pvc -n wordpress
  kubectl delete pvc wordpress-pvc -n wordpress
  kubectl get pod,pv,pvc -n wordpress
+ kubectl delete all --all -n wordpress-nfs
+ kubectl delete pvc mysql-pvc -n wordpress-nfs
+ kubectl delete pvc wordpress-pvc -n wordpress-nfs
+ kubectl get pod,pv,pvc -n wordpress-nfs
  ;;
   *) echo "abort";;
 esac
