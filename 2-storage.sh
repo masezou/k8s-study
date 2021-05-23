@@ -59,6 +59,7 @@ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs
     --set nfs.path=/nfsexport
 
 kubectl get sc
+kubectl get VolumeSnapshotClass
 
 echo ""
 echo "*************************************************************************************"
