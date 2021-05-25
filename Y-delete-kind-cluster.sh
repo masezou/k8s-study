@@ -26,8 +26,7 @@ case "$yn" in
  kind delete cluster --name k10-demo-dr
  kind get clusters
  rm -rf Your_kubeconfig
- rm -rf dashboard.token
- rm -rf k10-k10.token
+ rm -rf *.token
  rm -rf /nfsexport/*
  echo "you can re-create cluster with 1-buildk8s.sh"
  ;;
