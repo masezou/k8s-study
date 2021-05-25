@@ -10,6 +10,7 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/
 apt update
 #apt -y install kubectl
 apt-get install kubectl=1.19.11-00
+apt-mark hold kubectl
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
