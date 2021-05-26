@@ -60,6 +60,11 @@ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs
     --set nfs.server=${LOCALIPADDR} \
     --set nfs.path=/nfsexport
 
+# How to change default storage class from csi-hostpath-sc to nfs-client
+# kubectl patch storageclass csi-hostpath-sc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+# kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+# kubectl get sc
+
 kubectl get sc
 kubectl get VolumeSnapshotClass
 
