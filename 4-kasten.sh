@@ -23,7 +23,7 @@ bash ./get-helm-3
 helm version
 fi
 # Install K10-tools
-TOOLSVER=4.0.2
+TOOLSVER=4.0.3
 TOOLSARCH=linux_amd64
 if [ ! -f /usr/local/bin/k10tools ]; then
 curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_${TOOLSARCH}
