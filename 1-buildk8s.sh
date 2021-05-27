@@ -31,6 +31,29 @@ kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
+
+# Install kubectx and kubens
+if [ ! -f /usr/local/bin/kubectx ]; then
+KUBECTX=0.9.3
+${KUBECTX}
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_x86_64.tar.gz
+tar xfz kubectx_v${KUBECTX}_linux_x86_64.tar.gz
+mv kubectx /usr/local/bin/
+chmod +x /usr/local/bin/kubectx
+rm -rf LICENSE kubectx_v${KUBECTX}_linux_x86_64.tar.gz
+curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubectx.bash
+mv kubectx.bash /etc/bash_completion.d/
+source /etc/bash_completion.d/kubectx.bash
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubens_v${KUBECTX}_linux_x86_64.tar.gz
+tar xfz kubens_v${KUBECTX}_linux_x86_64.tar.gz
+mv kubens /usr/local/bin/
+chmod +x /usr/local/bin/kubens
+curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubens.bash
+mv kubens.bash /etc/bash_completion.d/
+source /etc/bash_completion.d/kubens.bash
+rm -rf LICENSE kubens_v${KUBECTX}_linux_x86_64.tar.gz
+fi
+
 # Install kubecolor
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
