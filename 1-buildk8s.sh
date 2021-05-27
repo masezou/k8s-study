@@ -52,6 +52,7 @@ curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kube
 mv kubens.bash /etc/bash_completion.d/
 source /etc/bash_completion.d/kubens.bash
 rm -rf LICENSE kubens_v${KUBECTX}_linux_x86_64.tar.gz
+apt -y install fzf
 fi
 
 # Install kubecolor
