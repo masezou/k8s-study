@@ -16,7 +16,7 @@ sudo ./aws/install
 rm -rf aws awscliv2.zip
 echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/awscli.sh
 source /etc/bash_completion
-cd
+cd || exit
 mkdir ~/.aws
 cat <<'EOF' >>~/.aws/config
 [profile minio]
@@ -29,18 +29,18 @@ aws_access_key_id= minioadmin
 aws_secret_access_key= minioadmin
 EOF
 chmod 600 ~/.aws/*
-cd
+cd || exit
 fi
 
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data
 chown minio-user:minio-user /minio
 mkdir -p ~/.minio/certs
-cd /minio
+cd /minio || exit
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
-cd
+cd || exit
 fi
 
 if [ ! -f /usr/bin/go ]; then
@@ -51,19 +51,18 @@ echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
 export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
 #go get -u github.com/posener/complete/gocomplete
 #$GOPATH/gocomplete -install -y  
-cd
+cd || exit
 fi
 
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
-go run generate_cert.go -ca --host $IPADDR
+go run generate_cert.go -ca --host ${IPADDR}
 rm generate_cert.go
-unset IPADDR
 mv cert.pem ~/.minio/certs/public.crt
 chmod 600 ~/.minio/certs/public.crt
 mv key.pem ~/.minio/certs/private.key
 chmod 600 ~/.minio/certs/private.key
-cd
+cd || exit
 
 ### add minio to systemctl
 if [ ! -f /etc/systemd/system/minio.service ]; then
@@ -81,7 +80,7 @@ MINIO_SECRET_KEY=minioadmin
 EOT
 fi
 
-( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
+( cd /etc/systemd/system/ || return ; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
 #aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
