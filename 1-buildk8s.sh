@@ -9,7 +9,7 @@ fi
 LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
-curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.0/kind-linux-amd64
+curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.1/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
 kind completion bash > /etc/bash_completion.d/kind
