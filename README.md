@@ -1,3 +1,9 @@
+This repository might not be well maintenanced due to my moving multinode environment....
+
+#note
+This NFS dynamic provisoning driver is not CSI driver.
+Loadbalancer would be working on localhost in docker environment.
+
 # k8s-study
 kubernates learning with single machine
 
@@ -36,7 +42,7 @@ kube-doom.sh: Doom on Kubernates.
 
 Minio
 
- http://your Kind host ip(Ubuntu IP):9000
+http://your Kind host ip(Ubuntu IP):9000
 
 Portainer
 
@@ -59,4 +65,3 @@ If you want to wipeout wordpress, run X-delete-wordpress.sh.
 If you want to delete KIND cluster, run Y-delete-kind-cluster.sh. You can re-start from 1-buildk8s.sh
 
 Note:MySQL Application consistance is not supported in this branch for now.
-
