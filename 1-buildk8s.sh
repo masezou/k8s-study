@@ -6,8 +6,11 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
-LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+
 # Install Kind
+uname -r | grep Microsoft
+KENELRTVL=$?
+if [ ${KENELRTVL} != 0 ]; then
 if [ ! -f /usr/local/bin/kind ]; then
 apt -y install docker.io
 curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.1/kind-linux-amd64
@@ -15,6 +18,7 @@ chmod +x ./kind
 mv ./kind /usr/local/bin/kind
 kind completion bash > /etc/bash_completion.d/kind
 source /etc/bash_completion.d/kind
+fi
 fi
 
 # Install kubectl
@@ -92,6 +96,7 @@ fi
 
 # Bulding Kind Cluster
 if [ ! -f /usr/local/bin/kind ]; then
+LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
