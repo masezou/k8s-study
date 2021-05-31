@@ -9,6 +9,7 @@ fi
 LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 # Install Kind
 if [ ! -f /usr/local/bin/kind ]; then
+apt -y install docker.io
 curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v0.11.1/kind-linux-amd64
 chmod +x ./kind
 mv ./kind /usr/local/bin/kind
@@ -19,7 +20,7 @@ fi
 # Install kubectl
 if [ ! -f /usr/bin/kubectl ]; then
 apt update
-apt -y install docker.io apt-transport-https gnupg2 curl
+apt -y install apt-transport-https gnupg2 curl
 systemctl enable --now docker
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
@@ -65,6 +66,8 @@ fi
 go get github.com/dty1er/kubecolor/cmd/kubecolor
 echo "alias kubectl=kubecolor" >> /etc/profile
 alias kubectl=kubecolor
+#apt -y autoremove golang-go
+
 
 # Install Helm
 if [ ! -f /usr/local/bin/helm ]; then
@@ -88,6 +91,7 @@ source /etc/bash_completion.d/skaffold
 fi
 
 # Bulding Kind Cluster
+if [ ! -f /usr/local/bin/kind ]; then
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
@@ -180,6 +184,8 @@ EOF
 kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}" > dashboard.token
 echo "" >> dashboard.token
 cat dashboard.token 
+
+fi
 
 # Expoert kubeconfig
 kubectl config view --raw > Your_kubeconfig
