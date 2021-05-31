@@ -44,7 +44,8 @@ cp /mnt/c/Users/[Username]/.kube/config ~/.kube/
 chmod -R go-wr ~/.kube
 kubectl get node
 cd k8s-study
-./2-tool.sh ; ./3-configk8s.sh ; ./4-nfs-storage.sh ; ./5-csi-storage.sh
+sudo ./2-tool.sh
+./3-configk8s.sh ; ./4-nfs-storage.sh ; ./5-csi-storage.sh
 ```
 
 # Note
