@@ -1,81 +1,44 @@
-This repository might not be well maintenanced due to my moving multinode environment....
-
-#note
-This NFS dynamic provisoning driver is not CSI driver.
-Loadbalancer would be working on localhost in docker environment.
-
 # k8s-study
-kubernates learning with single machine
 
-These scriput is use KIND simple K8s environment. I have tested only Linux environment.
+This is sample KIND deployment
 
-How to use....
+# Features
 
-Prepare following environment
-Ubuntu 20.04.1 above amd64 with 2vCPU 8GB RAM 100GB HDD with Internet Connection
+Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
-login ubuntu server
+# Requirement
 
-sudo -i
+Ubuntu Linux 20.04.2 or Windows 10 with ubuntu and docker.
 
-git clone this
+# Installation
 
-run following scripts
-
-0-minio.sh: Minio Object Storage environment (If you don't have object storage and starting minio with systemd)
-
-1-buildk8s.sh: Building KIND cluster (This script will deploy single node KIND cluster)
-
-2-storage.sh: Install CSI hostpath and dynamic nfs pvc environment  (This script will deploy CSI hostpath driver)
-
-3-wordpress.sh: Deploy wordpress blog site to host path
-
-3-nfs-wordpress.sh: Deploy wordpress blog site to nfs pv
-
-4-kasten.sh: Deploy K10 run kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000&
-
-S-service.sh: port-forearding wordpress and kasten.
-
-kube-doom.sh: Doom on Kubernates.
+git clone this.
 
 
 
-Minio
+# Usage
 
-http://your Kind host ip(Ubuntu IP):9000
+* Linux
+```bash
+git clone https://github.com/masezou/k8s-study
+cd k8s-study
+./0-minio-lnx.sh ; ./1-buildk8s-lnx.sh ; ./2-tool.sh ; ./3-configk8s.sh ; ./4-nfs-storage.sh ; ./5-csi-storage.sh
+```
 
-Portainer
+* Windows native OS
+```bash
+git clone https://github.com/masezou/k8s-study
+cd k8s-study
+1-buildk8s-win.cmd
+```
+* Ubuntu on Windows 10
+```bash
+cp /mnt/X/Users/[username]/.kube/config ~/.kube
+git clone https://github.com/masezou/k8s-study
+cd k8s-study
+./2-tool.sh ; ./3-configk8s.sh ; ./4-nfs-storage.sh ; ./5-csi-storage.sh
+```
 
-http://your Kind host ip(Ubuntu IP):9001
+# Note
 
-Wordpress
-
-http://your Kind host ip(Ubuntu IP)/
-
-Kasten
-
-https://your Kind host ip(Ubuntu IP):8080/k10/#/
-
-
-
-Delete environment:
-
-If you want to wipeout wordpress, run X-delete-wordpress.sh. 
-
-If you want to delete KIND cluster, run Y-delete-kind-cluster.sh. You can re-start from 1-buildk8s.sh
-
-Note:MySQL Application consistance is not supported in this branch for now.
-
-For Windows user
-
-You need to install following before execute bath file
-
-docker desktop
-
-kind
-
-kubectl
-
-and Ubuntu 20.04 WSL
-
-once execute 1-buildk8s.cmd then execute rest script in Ubuntu 20.04 WSL.
+This environment is KIND environment. Metallb only affect localhost. If you want to access from out of box. kubectl port-forward --address 0.0.0.0 service/hogehoge
