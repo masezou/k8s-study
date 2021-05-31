@@ -32,6 +32,7 @@ sed -i -e "s/nfs-server.default.svc.cluster.local/${NFSSVR}/g" storageclass-nfs.
 sed -i -e "s@share: /@share: ${NFSPATH}@g" storageclass-nfs.yaml
 kubectl create -f storageclass-nfs.yaml
 kubectl patch storageclass nfs-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 kubectl -n kube-system get pod -o wide -l app=csi-nfs-controller
 kubectl -n kube-system get pod -o wide -l app=csi-nfs-node
 
