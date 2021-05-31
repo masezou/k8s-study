@@ -65,3 +65,17 @@ If you want to wipeout wordpress, run X-delete-wordpress.sh.
 If you want to delete KIND cluster, run Y-delete-kind-cluster.sh. You can re-start from 1-buildk8s.sh
 
 Note:MySQL Application consistance is not supported in this branch for now.
+
+For Windows user
+
+You need to install following before execute bath file
+
+docker desktop
+
+kind
+
+kubectl
+
+and Ubuntu 20.04 WSL
+
+once execute 1-buildk8s.cmd then execute rest script in Ubuntu 20.04 WSL.
