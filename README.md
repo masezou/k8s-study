@@ -1,6 +1,6 @@
 # k8s-study
 
-This is sample KIND deployment
+This is sample KIND deployment. This project might not maintenance for now.
 
 # Features
 
