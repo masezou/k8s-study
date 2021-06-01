@@ -8,7 +8,8 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 # Requirement
 
-Ubuntu Linux 20.04.2 or Windows 10 with ubuntu and docker.
+  -Ubuntu Linux 20.04.2
+  -Windows 10 with ubuntu 20.04 in appstore and docker desktop and external NFS Server (Option).
 
 # Installation
 
@@ -16,19 +17,21 @@ git clone this.
 
 
 
-# Usage　（Linux)
+# Usage (Linux)
 
 * Linux
 ```bash
+sudo -i
 git clone https://github.com/masezou/k8s-study
 cd k8s-study
 ./0-minio-lnx.sh ; ./1-buildk8s-lnx.sh ; ./2-tool.sh ; ./3-configk8s.sh ; ./4-nfs-storage.sh ; ./5-csi-storage.sh
 ```
 
-# Usage　（Windows 10)
+# Usage (Windows 10)
 
 * Ubuntu on Windows 10
 ```bash
+sudo -i
 mkdir .kube
 git clone git@github.com:masezou/k8s-study.git
 cd k8s-study
@@ -43,6 +46,7 @@ Execute 1-buildk8s-win.cmd in Windows 10 native environment.
 You need to modify NFSSVR/NFSPATH in ./4-nfs-storage.sh 
 
 ```bash
+sudo -i
 cp /mnt/c/Users/[Username]/.kube/config ~/.kube/
 chmod -R go-wr ~/.kube
 kubectl get node
@@ -55,4 +59,4 @@ sudo ./2-tool.sh
 
 # Note
 
-This environment is KIND environment. Metallb only affect localhost. If you want to access from out of box. kubectl port-forward --address 0.0.0.0 service/hogehoge
+This environment is KIND environment. Metallb loadbalancer only affects to localhost. If you want to access from out of box. kubectl port-forward --address 0.0.0.0 service/hogehoge
