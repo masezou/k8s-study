@@ -6,7 +6,6 @@ if [ ${NODECOUNT} != 2 ]; then
         exit 255
 fi
 
-LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 
 SNAPSHOTTER_VERSION=v3.0.3
 
