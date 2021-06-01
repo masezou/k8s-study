@@ -8,12 +8,12 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 # Requirement
 
-  -Ubuntu Linux 20.04.2
-  -Windows 10
-    - ubuntu 20.04 in appstore 
-    - docker desktop (https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+  -Ubuntu Linux 20.04.2 (2vCPU 4GB RAM 50GB above)
+  -Windows 10 (2vCPU 16GB RAM 50GB above)
+    - ubuntu 20.04 in MS Appstore 
+    - Docker Desktop (https://hub.docker.com/editions/community/docker-ce-desktop-windows)
     - KIND (https://kind.sigs.k8s.io/docs/user/quick-start/)
-    - external NFS Server (Option).
+    - external Minio / NFS Server (Option).
 
 # Installation
 
