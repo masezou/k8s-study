@@ -24,7 +24,7 @@ if [ ! -f /usr/local/bin/mc ]; then
 curl -OL https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 mv mc /usr/local/bin/
-echo "complete -C /usr/local/bin/mc mc" > /etc/profile.d/mc.sh
+echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
 mc >/dev/null
 fi
 
@@ -86,6 +86,8 @@ echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
 echo "minio and mc was installed and configured successfully"
 echo "Next Step"
-echo "For Test: mc mb --with-lock local/test01"
+echo "Execute in this console or re-login if you want to use mc completion"
+echo "source /etc/profile"
+echo "For Test: 
 echo "mc mb --with-lock local/test01"
-echo "mc mb ls"
+echo "mc ls local/"
