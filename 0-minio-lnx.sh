@@ -6,6 +6,7 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
+IPADDR=`hostname -I | cut -d" " -f1`
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
 
@@ -41,7 +42,6 @@ fi
 
 if [ ! -f ~/.minio/certs/public.crt ]; then
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
-IPADDR=`hostname -I | cut -d" " -f1`
 go run generate_cert.go -ca --host ${IPADDR}
 rm generate_cert.go
 mv cert.pem ~/.minio/certs/public.crt
@@ -72,7 +72,6 @@ fi
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
 systemctl status minio.service --no-pager
-ufw allow 9000
 fi
 sleep 3
 mc alias rm local
@@ -82,7 +81,7 @@ mc admin info local/
 
 echo ""
 echo "*************************************************************************************"
-echo "minio server is https://${IPADDR}:9000
+echo "minio server is https://${IPADDR}:9000"
 echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
 echo "minio and mc was installed and configured successfully"
