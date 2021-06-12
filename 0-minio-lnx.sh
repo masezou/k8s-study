@@ -11,7 +11,7 @@ MINIO_ROOT_PASSWORD=minioadminuser
 
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
-chmod -R 755 /minio/data{1..4}
+chmod -R 755 /minio/data*
 mkdir -p ~/.minio/certs
 curl -OL https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
@@ -62,9 +62,9 @@ MINIO_VOLUMES="/minio/data{1-4}"
 # Use if you want to run MinIO on a custom port.
 MINIO_OPTS="--address :9000"
 # Access Key of the server.
-MINIO_ROOT_USER=minioadminuser
+MINIO_ROOT_USER=${MINIO_ROOT_USER}
 # Secret key of the server.
-MINIO_ROOT_PASSWORD=KEY=minioadminuser
+MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
 EOT
 fi
 
