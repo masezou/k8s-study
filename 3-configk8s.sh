@@ -68,5 +68,5 @@ kubectl config get-contexts
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
-echo "you can access Kubernetes dashboard with kubectl poroxy"
+echo "you can access Kubernetes dashboard with kubectl proxy"
 echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login"
