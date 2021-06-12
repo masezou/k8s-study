@@ -41,14 +41,15 @@ cd || exit
 fi
 
 if [ ! -f ~/.minio/certs/public.crt ]; then
+cd ~/.minio/certs/
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 go run generate_cert.go -ca --host ${LOCALIPADDR}
 rm generate_cert.go
-mv cert.pem ~/.minio/certs/public.crt
-chmod 600 ~/.minio/certs/public.crt
-cp ~/.minio/certs/public.crt ~/.mc/certs/CAs/
-mv key.pem ~/.minio/certs/private.key
-chmod 600 ~/.minio/certs/private.key
+mv cert.pem public.crt
+chmod 600 public.crt
+cp public.crt ~/.mc/certs/CAs/
+mv key.pem private.key
+chmod 600 private.key
 cd || exit
 fi
 
