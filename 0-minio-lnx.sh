@@ -75,7 +75,7 @@ systemctl status minio.service --no-pager
 fi
 sleep 3
 mc alias rm local
-MINIO_ENDPOINT=https://${LOCALIPADDR}9000
+MINIO_ENDPOINT=https://${LOCALIPADDR}:9000
 mc alias set local ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4
 mc admin info local/
 
