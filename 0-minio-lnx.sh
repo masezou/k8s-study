@@ -6,26 +6,36 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
-LOCALHOSTNAME=`hostname`
-LOCALIPADDR=`hostname -I | cut -d" " -f1`
+
+lsb_release -d | grep Ubuntu | grep 20.04
+DISTVER=$?
+if [ ${DISTVER} = 1 ]; then
+    echo "only supports Ubuntu 20.04 server"
+    exit 1
+else
+    echo "Ubuntu 20.04=OK"
+fi
+
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
+LOCALHOSTNAME=`hostname`
+LOCALIPADDR=`hostname -I | cut -d" " -f1`
 
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
 chmod -R 755 /minio/data*
 mkdir -p ~/.minio/certs
 curl -OL https://dl.min.io/server/minio/release/linux-amd64/minio
-chmod +x minio
 mv minio  /usr/local/bin/
+chmod +x /usr/local/bin/minio
 fi
 
 if [ ! -f /usr/local/bin/mc ]; then
 curl -OL https://dl.min.io/client/mc/release/linux-amd64/mc
-chmod +x mc
 mv mc /usr/local/bin/
+chmod +x /usr/local/bin/mc
 echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
-mc >/dev/null
+/usr/local/bin/mc >/dev/null
 fi
 
 if [ ! -f /root/.minio/certs/public.crt ]; then
@@ -80,6 +90,7 @@ sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
 systemctl status minio.service --no-pager
 fi
+
 sleep 3
 mc alias rm local
 MINIO_ENDPOINT=https://${LOCALIPADDR}:9000
