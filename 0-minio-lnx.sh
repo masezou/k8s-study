@@ -21,17 +21,18 @@ MINIO_ROOT_PASSWORD=minioadminuser
 LOCALHOSTNAME=`hostname`
 LOCALIPADDR=`hostname -I | cut -d" " -f1`
 
+ARCH=amd64
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
 chmod -R 755 /minio/data*
 mkdir -p ~/.minio/certs
-curl -OL https://dl.min.io/server/minio/release/linux-amd64/minio
+curl -OL https://dl.min.io/server/minio/release/linux-${ARCH}/minio
 mv minio  /usr/local/bin/
 chmod +x /usr/local/bin/minio
 fi
 
 if [ ! -f /usr/local/bin/mc ]; then
-curl -OL https://dl.min.io/client/mc/release/linux-amd64/mc
+curl -OL https://dl.min.io/client/mc/release/linux-${ARCH}/mc
 mv mc /usr/local/bin/
 chmod +x /usr/local/bin/mc
 echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
