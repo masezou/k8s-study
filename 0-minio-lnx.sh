@@ -6,7 +6,8 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
-
+MINIO_ROOT_USER=minioadminuser
+MINIO_ROOT_PASSWORD=minioadminuser
 
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
@@ -38,7 +39,7 @@ export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
 cd || exit
 fi
 
-if [ -f ~/.minio/certs/public.crt ]; then
+if [ ! -f ~/.minio/certs/public.crt ]; then
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
 go run generate_cert.go -ca --host ${IPADDR}
@@ -71,15 +72,21 @@ fi
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
 systemctl status minio.service --no-pager
+ufw allow 9000
 fi
 sleep 3
 mc alias rm local
 MINIO_ENDPOINT=https://localhost:9000
-mc alias set local ${MINIO_ENDPOINT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} --api S3v4
+mc alias set local ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4
 mc admin info local/
 
 echo ""
 echo "*************************************************************************************"
-echo "minio and bucket:backupkasten was created"
+echo "minio server is https://${IPADDR}:9000
+echo "username: ${MINIO_ROOT_USER}"
+echo "password: ${MINIO_ROOT_PASSWORD}"
+echo "minio and mc was installed and configured successfully"
 echo "Next Step"
-echo "There is no action."
+echo "For Test: mc mb --with-lock local/test01"
+echo "mc mb --with-lock local/test01"
+echo "mc mb ls"
