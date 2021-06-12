@@ -7,41 +7,26 @@ else
     echo "I am root user."
 fi
 
-if [ ! -f /usr/local/bin/aws ]; then
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -s -o "awscliv2.zip"
-apt update
-apt -y install unzip
-unzip -q awscliv2.zip
-sudo ./aws/install
-rm -rf aws awscliv2.zip
-echo "complete -C '/usr/local/bin/aws_completer' aws">/etc/profile.d/awscli.sh
-source /etc/bash_completion
-cd || exit
-mkdir ~/.aws
-cat <<'EOF' >>~/.aws/config
-[profile minio]
-region = us-east-1
-output = json
-EOF
-cat <<'EOF' >>~/.aws/credentials
-[minio]
-aws_access_key_id= minioadmin
-aws_secret_access_key= minioadmin
-EOF
-chmod 600 ~/.aws/*
-cd || exit
-fi
 
 if [ ! -f /usr/local/bin/minio ]; then
-mkdir -p /minio/data
+mkdir -p /minio/data{1..4}
+chmod -R 755 /minio/data{1..4}
 chown minio-user:minio-user /minio
 mkdir -p ~/.minio/certs
-cd /minio || exit
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
 cd || exit
 fi
+
+if [ ! -f /usr/local/bin/mc ]; then
+curl -OL https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+mv mc /usr/local/bin/
+echo "complete -C /usr/local/bin/mc mc" > /etc/profile.d/mc.sh
+mc >/dev/null
+fi
+
 
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
@@ -60,6 +45,7 @@ go run generate_cert.go -ca --host ${IPADDR}
 rm generate_cert.go
 mv cert.pem ~/.minio/certs/public.crt
 chmod 600 ~/.minio/certs/public.crt
+cp ~/.minio/certs/public.crt ~/.mc/certs/CAs/
 mv key.pem ~/.minio/certs/private.key
 chmod 600 ~/.minio/certs/private.key
 cd || exit
@@ -70,24 +56,26 @@ if [ ! -f /etc/systemd/system/minio.service ]; then
 if [ ! -f /etc/default/minio ]; then
 cat <<EOT > /etc/default/minio
 # Volume to be used for MinIO server.
-MINIO_VOLUMES="/minio/data"
+MINIO_VOLUMES="/minio/data{1-4}"
 # Use if you want to run MinIO on a custom port.
 MINIO_OPTS="--address :9000"
 # Access Key of the server.
-MINIO_ACCESS_KEY=minioadmin
+MINIO_ROOT_USER=minioadminuser
 # Secret key of the server.
-MINIO_SECRET_KEY=minioadmin
+MINIO_ROOT_PASSWORD=KEY=minioadminuser
 EOT
 fi
 
 ( cd /etc/systemd/system/ || return ; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
-#aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 mb s3://backupkasten
 fi
 
 systemctl status minio.service --no-pager
-aws --profile minio --no-verify --endpoint-url https://localhost:9000 s3 ls
+sleep 3
+mc alias rm local
+mc alias set local ${AWS_ENDPOINT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} --api S3v4
+mc admin info local/
 
 echo ""
 echo "*************************************************************************************"
