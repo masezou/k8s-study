@@ -11,7 +11,6 @@ fi
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
 chmod -R 755 /minio/data{1..4}
-chown minio-user:minio-user /minio
 mkdir -p ~/.minio/certs
 wget https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
@@ -39,6 +38,7 @@ export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
 cd || exit
 fi
 
+if [ -f ~/.minio/certs/public.crt ]; then
 curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
 IPADDR=`hostname -I | cut -d" " -f1`
 go run generate_cert.go -ca --host ${IPADDR}
@@ -49,6 +49,7 @@ cp ~/.minio/certs/public.crt ~/.mc/certs/CAs/
 mv key.pem ~/.minio/certs/private.key
 chmod 600 ~/.minio/certs/private.key
 cd || exit
+fi
 
 ### add minio to systemctl
 if [ ! -f /etc/systemd/system/minio.service ]; then
