@@ -12,7 +12,7 @@ if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
 chmod -R 755 /minio/data{1..4}
 mkdir -p ~/.minio/certs
-wget https://dl.min.io/server/minio/release/linux-amd64/minio
+curl -OL https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
 cd || exit
@@ -70,12 +70,12 @@ fi
 ( cd /etc/systemd/system/ || return ; curl -O https://raw.githubusercontent.com/minio/minio-service/master/linux-systemd/minio.service )
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
-fi
-
 systemctl status minio.service --no-pager
+fi
 sleep 3
 mc alias rm local
-mc alias set local ${AWS_ENDPOINT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} --api S3v4
+MINIO_ENDPOINT=https://localhost:9000
+mc alias set local ${MINIO_ENDPOINT} ${MINIO_ACCESS_KEY} ${MINIO_SECRET_KEY} --api S3v4
 mc admin info local/
 
 echo ""
