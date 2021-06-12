@@ -53,11 +53,12 @@ echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
 export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
 cd
 fi
+if [ ! -f /root/go/bin/kubecolor ]; then
 go get github.com/dty1er/kubecolor/cmd/kubecolor
 echo "alias kubectl=kubecolor" >> /etc/profile
 alias kubectl=kubecolor
 #apt -y autoremove golang-go
-
+fi
 
 # Install Helm
 if [ ! -f /usr/local/bin/helm ]; then
