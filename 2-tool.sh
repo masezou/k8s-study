@@ -7,7 +7,7 @@ else
     echo "I am root user."
 fi
 
-KUBECTXARCH=linux_x86_64
+KUBECTXARCH=linux_`arch`
 
 # Install kubectl
 if [ ! -f /usr/bin/kubectl ]; then

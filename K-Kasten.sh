@@ -2,24 +2,24 @@
 
 # Install K10-tools
 TOOLSVER=4.0.4
-TOOLSARCH=linux_amd64
+TOOLSARCH=amd64
 if [ ! -f /usr/local/bin/k10tools ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_${TOOLSARCH}
-mv k10tools_${TOOLSVER}_${TOOLSARCH} /usr/local/bin/k10tools
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${TOOLSARCH}
+mv k10tools_${TOOLSVER}_linux_${TOOLSARCH} /usr/local/bin/k10tools
 chmod +x /usr/local/bin/k10tools
 fi
 
 if [ ! -f /usr/local/bin/k10multicluster ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_${TOOLSARCH}
-mv k10multicluster_${TOOLSVER}_${TOOLSARCH}  /usr/local/bin/k10multicluster
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_linux_${TOOLSARCH}
+mv k10multicluster_${TOOLSVER}_linux_${TOOLSARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
 
 KUBESTRVER=0.4.17
 if [ ! -f /usr/local/bin/kubestr ]; then
-curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
-tar xfz kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
-rm kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
+curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
+tar xfz kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
+rm kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
 mv kubestr /usr/local/bin/kubestr
 chmod +x /usr/local/bin/kubestr
 fi
@@ -44,13 +44,15 @@ kubectl get secret $sa_secret --namespace kasten-io -ojsonpath="{.data.token}{'\
 echo "" >> k10-k10.token
 cat k10-k10.token
 echo
+LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
 echo "Confirm wordpress kasten is running with kubectl get pods --namespace kasten-io"
+echo "prometheus-server may be backoff off, but it can be ignoree for now."
 echo "kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000"
-echo "Open your browser https://your Kind host ip(Ubuntu IP):8080/k10/#/"
+echo "Open your browser https://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
 echo "kubectl --namespace kasten-io get svc"
 echo "Open your browser https://External-IP/k10"
