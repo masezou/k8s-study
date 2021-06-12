@@ -24,6 +24,7 @@ fi
 
 # Install kubectx and kubens
 if [ ! -f /usr/local/bin/kubectx ]; then
+KUBECTX=0.9.3
 curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_x86_64.tar.gz
 tar xfz kubectx_v${KUBECTX}_linux_x86_64.tar.gz
 mv kubectx /usr/local/bin/
