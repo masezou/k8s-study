@@ -89,6 +89,6 @@ echo "minio and mc was installed and configured successfully"
 echo "Next Step"
 echo "Execute in this console or re-login if you want to use mc completion"
 echo "source /etc/profile"
-echo "For Test: 
+echo "For Test:"
 echo "mc mb --with-lock local/test01"
 echo "mc ls local/"
