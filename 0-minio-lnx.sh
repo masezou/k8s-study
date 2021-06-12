@@ -6,6 +6,7 @@ if [ ${EUID:-${UID}} != 0 ]; then
 else
     echo "I am root user."
 fi
+LOCALHOSTNAME=`hostname`
 LOCALIPADDR=`hostname -I | cut -d" " -f1`
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
@@ -28,23 +29,30 @@ echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
 mc >/dev/null
 fi
 
-
-if [ ! -f /usr/bin/go ]; then
-apt -y install golang-go
-export GOPATH=$HOME/go
-echo "export GOPATH=$HOME/go" >>/etc/profile
-echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
-export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
-#go get -u github.com/posener/complete/gocomplete
-#$GOPATH/gocomplete -install -y  
-cd || exit
-fi
-
 if [ ! -f ~/.minio/certs/public.crt ]; then
-cd ~/.minio/certs/
-curl -s -o  generate_cert.go "https://golang.org/src/crypto/tls/generate_cert.go?m=text"
-go run generate_cert.go -ca --host ${LOCALIPADDR}
-rm generate_cert.go
+openssl genrsa -out private.key 2048
+cat <<EOF> openssl.conf
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = US
+ST = VA
+L = Somewhere
+O = MyOrg
+OU = MyOU
+CN = MyServerName
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = ${LOCALIPADDR}
+DNS.1 = ${LOCALHOSTNAME}
+EOF
+openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config openssl.conf
 mv key.pem private.key
 mv cert.pem public.crt
 chmod 600 public.crt
