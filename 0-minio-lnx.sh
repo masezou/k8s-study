@@ -81,7 +81,7 @@ mc admin info local/
 
 echo ""
 echo "*************************************************************************************"
-echo "minio server is ${MINIO_ENDPOINT}
+echo "minio server is ${MINIO_ENDPOINT}"
 echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
 echo "minio and mc was installed and configured successfully"
