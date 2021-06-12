@@ -18,7 +18,6 @@ mkdir -p ~/.minio/certs
 curl -OL https://dl.min.io/server/minio/release/linux-amd64/minio
 chmod +x minio
 mv minio  /usr/local/bin/
-cd || exit
 fi
 
 if [ ! -f /usr/local/bin/mc ]; then
@@ -29,7 +28,8 @@ echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
 mc >/dev/null
 fi
 
-if [ ! -f ~/.minio/certs/public.crt ]; then
+if [ ! -f /root/.minio/certs/public.crt ]; then
+cd /root/.minio/certs/
 openssl genrsa -out private.key 2048
 cat <<EOF> openssl.conf
 [req]
@@ -53,8 +53,7 @@ IP.1 = ${LOCALIPADDR}
 DNS.1 = ${LOCALHOSTNAME}
 EOF
 openssl req -new -x509 -nodes -days 730 -key private.key -out public.crt -config openssl.conf
-mv key.pem private.key
-mv cert.pem public.crt
+chmod 600 private.key
 chmod 600 public.crt
 cp public.crt ~/.mc/certs/CAs/
 cd || exit
@@ -95,7 +94,7 @@ echo "password: ${MINIO_ROOT_PASSWORD}"
 echo "minio and mc was installed and configured successfully"
 echo "Next Step"
 echo "Execute in this console or re-login if you want to use mc completion"
-echo "source /etc/profile"
+echo "source /etc/bash_completion.d/mc.sh"
 echo "For Test:"
 echo "mc mb --with-lock local/test01"
 echo "mc ls local/"
