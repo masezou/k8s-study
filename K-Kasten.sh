@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Install K10-tools
-TOOLSVER=4.0.3
+TOOLSVER=4.0.4
 TOOLSARCH=linux_amd64
 if [ ! -f /usr/local/bin/k10tools ]; then
 curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_${TOOLSARCH}
@@ -15,7 +15,7 @@ mv k10multicluster_${TOOLSVER}_${TOOLSARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
 
-KUBESTRVER=0.4.16
+KUBESTRVER=0.4.17
 if [ ! -f /usr/local/bin/kubestr ]; then
 curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
 tar xfz kubestr-v${KUBESTRVER}-linux-amd64.tar.gz
