@@ -58,7 +58,7 @@ if [ ! -f /etc/systemd/system/minio.service ]; then
 if [ ! -f /etc/default/minio ]; then
 cat <<EOT > /etc/default/minio
 # Volume to be used for MinIO server.
-MINIO_VOLUMES="/minio/data{1-4}"
+MINIO_VOLUMES="/minio/data1 /minio/data2 /minio/data3 /minio/data4"
 # Use if you want to run MinIO on a custom port.
 MINIO_OPTS="--address :9000"
 # Access Key of the server.
