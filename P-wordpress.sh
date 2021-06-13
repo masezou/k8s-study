@@ -155,4 +155,5 @@ echo "**************************************************************************
 echo "Next Step"
 echo "Confirm wordpress pod and mysql pod are running with kubectl get pod -A"
 echo "run kubectl -n ${NAMESPACE} get svc"
-echo "Open your browser https://external ip)"
+echo "Open your browser http://external ip)"
+echo "You can test access with lynx  http://external ip)" 
