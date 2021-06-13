@@ -12,7 +12,7 @@ uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
     KINDVER=0.11.1
-    KINDARCH=arm64
+    KINDARCH=amd64
 	if [ ! -f /usr/local/bin/kind ]; then
 	apt -y install docker.io
 	curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v${KINDVER}/kind-linux-${KINDARCH}
