@@ -7,15 +7,38 @@ else
     echo "I am root user."
 fi
 
+PARCH=`arch`
+if [ ${PARCH} = aarch64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = arm64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = x86_64 ]; then
+  ARCH=amd64
+  echo ${ARCH}
+else
+  echo 'This platform is not supported'
+  exit 1
+fi
+
+ip address show ens160 >/dev/null
+retval=$?
+if [ ${retval} -eq 0 ]; then
+        LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+else
+        LOCALIPADDR=`ip -f inet -o addr show eth0 |cut -d\  -f 7 | cut -d/ -f 1`
+fi
+echo ${LOCALIPADDR}
+
 # Install Kind
 uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
     KINDVER=0.11.1
-    KINDARCH=amd64
 	if [ ! -f /usr/local/bin/kind ]; then
 	apt -y install docker.io
-	curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v${KINDVER}/kind-linux-${KINDARCH}
+	curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v${KINDVER}/kind-linux-${ARCH}
 	chmod +x ./kind
 	mv ./kind /usr/local/bin/kind
 	kind completion bash > /etc/bash_completion.d/kind
@@ -25,7 +48,7 @@ fi
 
 # Bulding Kind Cluster
 if [  -f /usr/local/bin/kind ]; then
-LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s

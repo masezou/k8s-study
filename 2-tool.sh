@@ -7,7 +7,21 @@ else
     echo "I am root user."
 fi
 
-KUBECTXARCH=`arch`
+PARCH=`arch`
+if [ ${PARCH} = aarch64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = arm64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = x86_64 ]; then
+  ARCH=amd64
+  echo ${ARCH}
+else
+  echo 'This platform is not supported'
+  exit 1
+fi
+
 
 # Install kubectl
 if [ ! -f /usr/bin/kubectl ]; then
@@ -26,6 +40,7 @@ fi
 
 # Install kubectx and kubens
 if [ ! -f /usr/local/bin/kubectx ]; then
+KUBECTXARCH=`arch`
 KUBECTX=0.9.3
 curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
 tar xfz kubectx_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
@@ -75,9 +90,8 @@ helm repo update
 fi
 
 # Install Skaffold
-SKAFFOLDARCH=amd64
 if [ ! -f /usr/local/bin/skaffold ]; then
-curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-${SKAFFOLDARCH} && \
+curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-${ARCH} && \
 install skaffold /usr/local/bin/
 rm skaffold
 skaffold completion bash >/etc/bash_completion.d/skaffold

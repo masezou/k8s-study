@@ -1,25 +1,38 @@
 #!/usr/bin/env bash
 
+if [ ${PARCH} = aarch64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = arm64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = x86_64 ]; then
+  ARCH=amd64
+  echo ${ARCH}
+else
+  echo 'This platform is not supported'
+  exit 1
+fi
+
 # Install K10-tools
 TOOLSVER=4.0.4
-TOOLSARCH=amd64
 if [ ! -f /usr/local/bin/k10tools ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${TOOLSARCH}
-mv k10tools_${TOOLSVER}_linux_${TOOLSARCH} /usr/local/bin/k10tools
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${ARCH}
+mv k10tools_${TOOLSVER}_linux_${ARCH} /usr/local/bin/k10tools
 chmod +x /usr/local/bin/k10tools
 fi
 
 if [ ! -f /usr/local/bin/k10multicluster ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_linux_${TOOLSARCH}
-mv k10multicluster_${TOOLSVER}_linux_${TOOLSARCH}  /usr/local/bin/k10multicluster
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_linux_${ARCH}
+mv k10multicluster_${TOOLSVER}_linux_${ARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
 
 KUBESTRVER=0.4.17
 if [ ! -f /usr/local/bin/kubestr ]; then
-curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
-tar xfz kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
-rm kubestr-v${KUBESTRVER}-linux-${TOOLSARCH}.tar.gz
+curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
+tar xfz kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
+rm kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
 mv kubestr /usr/local/bin/kubestr
 chmod +x /usr/local/bin/kubestr
 fi
