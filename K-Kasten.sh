@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+PARCH=`arch`
 if [ ${PARCH} = aarch64 ]; then
   ARCH=arm64
   echo ${ARCH}
@@ -28,6 +28,7 @@ mv k10multicluster_${TOOLSVER}_linux_${ARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
 
+if [ ${ARCH} = "amd64" ]; then
 KUBESTRVER=0.4.17
 if [ ! -f /usr/local/bin/kubestr ]; then
 curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
@@ -75,3 +76,8 @@ echo "Open your browser https://External-IP/k10"
 echo "then input login token"
 echo "Note:"
 echo 
+
+else
+	echo "kubestr: ${ARCH} is not supported"
+	echo "Kasten-io: ${ARCH} is not supported"
+fi
