@@ -21,7 +21,22 @@ MINIO_ROOT_PASSWORD=minioadminuser
 LOCALHOSTNAME=`hostname`
 LOCALIPADDR=`hostname -I | cut -d" " -f1`
 
-ARCH=amd64
+PARCH=`arch`
+
+if [ ${PARCH} = aarch64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = arm64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = x86_64 ]; then
+  ARCH=amd64
+  echo ${ARCH}
+else
+  echo 'This platform is not supported'
+  exit 1
+fi
+
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
 chmod -R 755 /minio/data*
