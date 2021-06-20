@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#########################################################
+### UID Check ###
 if [ ${EUID:-${UID}} != 0 ]; then
     echo "This script must be run as root"
     exit 1
@@ -7,6 +9,17 @@ else
     echo "I am root user."
 fi
 
+### Distribution Check ###
+lsb_release -d | grep Ubuntu | grep 20.04
+DISTVER=$?
+if [ ${DISTVER} = 1 ]; then
+    echo "only supports Ubuntu 20.04 server"
+    exit 1
+else
+    echo "Ubuntu 20.04=OK"
+fi
+
+### ARCH Check ###
 PARCH=`arch`
 if [ ${PARCH} = aarch64 ]; then
   ARCH=arm64
@@ -18,10 +31,21 @@ elif [ ${PARCH} = x86_64 ]; then
   ARCH=amd64
   echo ${ARCH}
 else
-  echo 'This platform is not supported'
+  echo "${ARCH} platform is not supported"
   exit 1
 fi
 
+#### LOCALIP #########
+ip address show ens160 >/dev/null
+retval=$?
+if [ ${retval} -eq 0 ]; then
+        LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+else
+        LOCALIPADDR=`ip -f inet -o addr show eth0 |cut -d\  -f 7 | cut -d/ -f 1`
+fi
+echo ${LOCALIPADDR}
+
+#########################################################
 
 # Install kubectl
 if [ ! -f /usr/bin/kubectl ]; then
@@ -39,25 +63,27 @@ echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
 
 # Install kubectx and kubens
-if [ ! -f /usr/local/bin/kubectx ]; then
-KUBECTXARCH=`arch`
 KUBECTX=0.9.3
-curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
-tar xfz kubectx_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
+if [ ! -f /usr/local/bin/kubectx ]; then
+if [ ${ARCH} = amd64 ]; then
+	ARCH=x86_64
+fi
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
+tar xfz kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
 mv kubectx /usr/local/bin/
 chmod +x /usr/local/bin/kubectx
-rm -rf LICENSE kubectx_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
+rm -rf LICENSE kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
 curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubectx.bash
 mv kubectx.bash /etc/bash_completion.d/
 source /etc/bash_completion.d/kubectx.bash
-curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubens_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
-tar xfz kubens_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
+tar xfz kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
 mv kubens /usr/local/bin/
 chmod +x /usr/local/bin/kubens
 curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubens.bash
 mv kubens.bash /etc/bash_completion.d/
 source /etc/bash_completion.d/kubens.bash
-rm -rf LICENSE kubens_v${KUBECTX}_linux_${KUBECTXARCH}.tar.gz
+rm -rf LICENSE kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
 apt -y install fzf
 fi
 

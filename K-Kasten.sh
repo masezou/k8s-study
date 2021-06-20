@@ -1,4 +1,25 @@
 #!/usr/bin/env bash
+
+#########################################################
+### UID Check ###
+if [ ${EUID:-${UID}} != 0 ]; then
+    echo "This script must be run as root"
+    exit 1
+else
+    echo "I am root user."
+fi
+
+### Distribution Check ###
+lsb_release -d | grep Ubuntu | grep 20.04
+DISTVER=$?
+if [ ${DISTVER} = 1 ]; then
+    echo "only supports Ubuntu 20.04 server"
+    exit 1
+else
+    echo "Ubuntu 20.04=OK"
+fi
+
+### ARCH Check ###
 PARCH=`arch`
 if [ ${PARCH} = aarch64 ]; then
   ARCH=arm64
@@ -10,9 +31,21 @@ elif [ ${PARCH} = x86_64 ]; then
   ARCH=amd64
   echo ${ARCH}
 else
-  echo 'This platform is not supported'
+  echo "${ARCH} platform is not supported"
   exit 1
 fi
+
+#### LOCALIP #########
+ip address show ens160 >/dev/null
+retval=$?
+if [ ${retval} -eq 0 ]; then
+        LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+else
+        LOCALIPADDR=`ip -f inet -o addr show eth0 |cut -d\  -f 7 | cut -d/ -f 1`
+fi
+echo ${LOCALIPADDR}
+
+#########################################################
 
 # Install K10-tools
 TOOLSVER=4.0.4
@@ -58,7 +91,6 @@ kubectl get secret $sa_secret --namespace kasten-io -ojsonpath="{.data.token}{'\
 echo "" >> k10-k10.token
 cat k10-k10.token
 echo
-LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
 
 echo ""
 echo "*************************************************************************************"
