@@ -8,9 +8,9 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 # Requirement
 
--Ubuntu Linux Server 20.04.2 2vCPU 4GB RAM 50GB above
+-Ubuntu Linux Server 20.04.2 4vCPU 8GB RAM 50GB above
 
--Windows 10 2vCPU 16GB RAM 50GB above
+-Windows 10 4vCPU 16GB RAM 50GB above
  - ubuntu Server 20.04 in MS Appstore 
  - Docker Desktop (https://hub.docker.com/editions/community/docker-ce-desktop-windows)
  - KIND (https://kind.sigs.k8s.io/docs/user/quick-start/)
@@ -58,7 +58,7 @@ cd k8s-study
 sudo ./2-tool.sh
 ./3-configk8s.sh
 ./4-csi-storage.sh
-```
+````
 
 # Note
 
