@@ -76,8 +76,6 @@ git clone https://github.com/kubernetes-csi/csi-driver-host-path.git  -b v1.7.2
 cd csi-driver-host-path
 ./deploy/kubernetes-1.18/deploy.sh
 kubectl apply -f ./examples/csi-storageclass.yaml
-kubectl patch storageclass nfs-csi \
-    -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 kubectl patch storageclass csi-hostpath-sc \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 kubectl patch storageclass standard \
