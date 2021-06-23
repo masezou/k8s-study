@@ -89,7 +89,7 @@ rm k10primer.yaml
 kubectl create namespace kasten-io
 #helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
 #helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true
-helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true --set externalGateway.create=true --set ingress.create=true
+helm install k10 kasten/k10 --namespace=kasten-io --set global.persistence.storageClass=csi-hostpath-sc --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true --set externalGateway.create=true --set ingress.create=true
 
 echo "Following is login token"
 sa_secret=$(kubectl get serviceaccount k10-k10 -o jsonpath="{.secrets[0].name}" --namespace kasten-io)
