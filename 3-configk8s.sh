@@ -114,8 +114,8 @@ echo "" >> dashboard.token
 cat dashboard.token 
 
 # Expoert kubeconfig
-kubectl config view --raw > Your_kind_kubeconfig
-echo "" >>Your_kind_kubeconfig
+kubectl config view --raw > Your_kind_kubeconfig-`hostname`
+echo "" >>Your_kind_kubeconfig-`hostname`
 #kubectl config use-context kind-k10-demo
 kubectl config get-contexts
 
