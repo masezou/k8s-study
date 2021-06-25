@@ -2,6 +2,7 @@
 
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
+MINIOSECRETKEY=miniosecretkey
 LOCALHOSTNAME=`hostname`
 
 #########################################################
@@ -133,11 +134,77 @@ MINIO_ENDPOINT=https://${LOCALIPADDR}:9000
 mc alias set local ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4
 mc admin info local/
 
+
+### Console install
+if [ ! -f /usr/local/bin/console ]; then
+curl -OL https://github.com/minio/console/releases/latest/download/console-linux-${ARCH}
+mv console-linux-${ARCH}  /usr/local/bin/console
+chmod +x /usr/local/bin/console
+fi
+
+echo -e "console\n${MINIOSECRETKEY}" | mc admin user add local/
+cat > admin.json << EOF
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+			"Action": [
+				"admin:*"
+			],
+			"Effect": "Allow",
+			"Sid": ""
+		},
+		{
+			"Action": [
+                "s3:*"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:s3:::*"
+			],
+			"Sid": ""
+		}
+	]
+}
+EOF
+mc admin policy add local/ consoleAdmin admin.json
+rm admin.json
+mc admin policy set local/ consoleAdmin user=console
+
+# For https connection
+mkdir -p ~/.console/certs/CAs
+cp -f ~/.minio/certs/public.crt ~/.console/certs/CAs
+
+### add minio-console to systemctl
+if [ ! -f /etc/systemd/system/minio-console.service ]; then
+
+if [ ! -f /etc/default/minio-console ]; then
+cat <<EOT >> /etc/default/minio-console
+# Special opts
+CONSOLE_OPTS="--port 9090"
+# salt to encrypt JWT payload
+CONSOLE_PBKDF_PASSPHRASE=SECRET
+# required to encrypt JWT payload
+CONSOLE_PBKDF_SALT=SECRET
+# MinIO Endpoint
+CONSOLE_MINIO_SERVER=https://${LOCALIPADDR}:9000
+
+EOT
+fi
+
+( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/console/master/systemd/console.service )
+sed -i -e 's/console-user/root/g' /etc/systemd/system/console.service
+systemctl enable --now console.service
+systemctl status console.service --no-pager
+fi
+
 echo ""
 echo "*************************************************************************************"
 echo "minio server is ${MINIO_ENDPOINT}"
 echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
+echo "minio console is http://${LOCALIPADDR}:9090"
+echo "Access key is console"
+echo "Secret key is ${MINIOSECRETKEY}" 
 echo "minio and mc was installed and configured successfully"
 echo "Next Step"
 echo "Execute in this console or re-login if you want to use mc completion"
