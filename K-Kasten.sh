@@ -81,15 +81,28 @@ fi
 helm repo add kasten https://charts.kasten.io/
 helm repo update
 
+kubectl get sc | grep hostpath
+retval2=$?
+if [ ${retval2} -eq 0 ]; then
 kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
     k10.kasten.io/is-snapshot-class=true
+fi
 
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 kubectl create namespace kasten-io
-#helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true
-#helm install k10 kasten/k10 --namespace=kasten-io --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true
-helm install k10 kasten/k10 --namespace=kasten-io --set services.securityContext.runAsUser=0 --set services.securityContext.fsGroup=0 --set prometheus.server.securityContext.runAsUser=0 --set prometheus.server.securityContext.runAsGroup=0 --set prometheus.server.securityContext.runAsNonRoot=false --set prometheus.server.securityContext.fsGroup=0 --set global.persistence.storageClass=csi-hostpath-sc --set injectKanisterSidecar.enabled=true --set auth.tokenAuth.enabled=true --set externalGateway.create=true --set ingress.create=true
+helm install k10 kasten/k10 --namespace=kasten-io \
+--set services.securityContext.runAsUser=0 \
+--set services.securityContext.fsGroup=0 \
+--set prometheus.server.securityContext.runAsUser=0 \
+--set prometheus.server.securityContext.runAsGroup=0 \
+--set prometheus.server.securityContext.runAsNonRoot=false \
+--set prometheus.server.securityContext.fsGroup=0 \
+--set global.persistence.storageClass=csi-hostpath-sc \
+--set injectKanisterSidecar.enabled=true \
+--set auth.tokenAuth.enabled=true \
+--set externalGateway.create=true \
+--set ingress.create=true
 
 echo "Following is login token"
 sa_secret=$(kubectl get serviceaccount k10-k10 -o jsonpath="{.secrets[0].name}" --namespace kasten-io)

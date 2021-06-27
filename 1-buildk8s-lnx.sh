@@ -35,6 +35,16 @@ else
   exit 1
 fi
 
+### CPU Core count Check ###
+CPUCORECOUNT=`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`
+echo "CPU is ${CPUCORECOUNT}"
+if [ ${CPUCORECOUNT} -ge 4 ]; then
+ echo "CPU core count is OK"
+else
+ echo "Too small CPU core count, please add cpu core at  least 4vCPU"
+ exit 1
+fi  
+
 #### LOCALIP #########
 ip address show ens160 >/dev/null
 retval=$?
