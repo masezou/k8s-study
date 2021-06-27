@@ -119,6 +119,8 @@ MINIO_OPTS="--address :9000"
 MINIO_ROOT_USER=${MINIO_ROOT_USER}
 # Secret key of the server.
 MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+# Use Prometheus
+MINIO_PROMETHEUS_AUTH_TYPE="public"
 EOT
 fi
 
@@ -133,6 +135,46 @@ mc alias rm local
 MINIO_ENDPOINT=https://${LOCALIPADDR}:9000
 mc alias set local ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4
 mc admin info local/
+
+# Prometheus
+ if [ ! -f /usr/local/prometheus/prometheus-server/prometheus-server ]; then
+PROMETHEUSVER=2.28.0
+mkdir -p /usr/local/prometheus
+cd /usr/local/prometheus
+curl -OL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUSVER}/prometheus-${PROMETHEUSVER}.linux-${ARCH}.tar.gz
+tar zxf prometheus-${PROMETHEUSVER}.linux-${ARCH}.tar.gz
+mv prometheus-${PROMETHEUSVER}.linux-${ARCH} prometheus-server
+cd prometheus-server
+mv prometheus.yml prometheus.yml.org
+cat << EOT > prometheus.yml
+scrape_configs:
+- job_name: minio-job
+  metrics_path: /minio/v2/metrics/cluster
+  scheme: https
+  static_configs:
+  - targets: ['${LOCALIPADDR}:9000']
+  tls_config:
+   insecure_skip_verify: true
+EOT
+
+cat << EOT > /usr/lib/systemd/system/prometheus.service
+[Unit]
+Description=Prometheus - Monitoring system and time series database
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/prometheus/prometheus-server/prometheus \
+  --config.file=/usr/local/prometheus/prometheus-server/prometheus.yml \
+
+[Install]
+WantedBy=multi-user.target
+EOT
+systemctl enable --now prometheus.service
+systemctl status prometheus.service --no-pager
+fi
 
 
 ### Console install
@@ -180,14 +222,15 @@ if [ ! -f /etc/systemd/system/minio-console.service ]; then
 if [ ! -f /etc/default/minio-console ]; then
 cat <<EOT >> /etc/default/minio-console
 # Special opts
-CONSOLE_OPTS="--port 9090"
+CONSOLE_OPTS="--port 9091"
 # salt to encrypt JWT payload
 CONSOLE_PBKDF_PASSPHRASE=SECRET
 # required to encrypt JWT payload
 CONSOLE_PBKDF_SALT=SECRET
 # MinIO Endpoint
 CONSOLE_MINIO_SERVER=https://${LOCALIPADDR}:9000
-
+# Prometheus
+CONSOLE_PROMETHEUS_URL=http://${LOCALIPADDR}:9090"
 EOT
 fi
 
@@ -202,7 +245,7 @@ echo "**************************************************************************
 echo "minio server is ${MINIO_ENDPOINT}"
 echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
-echo "minio console is http://${LOCALIPADDR}:9090"
+echo "minio console is http://${LOCALIPADDR}:9091"
 echo "Access key is console"
 echo "Secret key is ${MINIOSECRETKEY}" 
 echo "minio and mc was installed and configured successfully"
