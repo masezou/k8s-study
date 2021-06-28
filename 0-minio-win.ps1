@@ -213,6 +213,6 @@ $env:URLHOST2 = $Env:URLHOST2+=":9090"
 write-host $env:URLHOST2
 
 start http://$env:URLHOST2
-Write-Host Done. credential is minioadminuser. Hit any key -NoNewLine
+Write-Host Done. credential is minioadminuser/miniosecretkey. Hit any key -NoNewLine
 [Console]::ReadKey() | Out-Null
 
