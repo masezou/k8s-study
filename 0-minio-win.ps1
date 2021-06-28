@@ -139,7 +139,7 @@ echo @"
 start-service prometheus
 
 cd C:\minio\
-C:\minio\mc.exe admin user add local/ console miniosecuritykey
+C:\minio\mc.exe admin user add local/ console miniosecretkey
 echo @"
 {
         "Version": "2012-10-17",
