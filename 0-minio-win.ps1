@@ -12,7 +12,7 @@ $ENV:Path+=";C:\minio\gnutils\win64-build\bin"
 
 mkdir $env:USERPROFILE\.minio\certs
 cd $env:USERPROFILE\.minio\certs
-certtool.exe --generate-privkey --outfile private.key
+C:\minio\gnutils\win64-build\bin\certtool.exe --generate-privkey --outfile private.key
 
 echo @"
 # X.509 Certificate options
@@ -40,7 +40,7 @@ expiration_days = 365
 # X.509 v3 extensions
 
 # DNS name(s) of the server
-dns_name = "localhost"
+dns_name = "$Env:COMPUTERNAME"
 
 # (Optional) Server IP address
 ip_address = "127.0.0.1"
@@ -49,9 +49,10 @@ ip_address = "127.0.0.1"
 tls_www_server
 "@ >cert.cnf
 ls -r -file -filter *.cnf | % { (get-content -encoding Default $_.FullName) -join "`r`n" | set-content -encoding Default $_.FullName }
-certtool.exe --generate-self-signed --load-privkey private.key --template cert.cnf --outfile public.crt
-mkdir $env:USERPROFILE\mc\certs\CA
-cp  $env:USERPROFILE\.minio\certs\public.crt $env:USERPROFILE\mc\certs\CA
+C:\minio\gnutils\win64-build\bin\certtool.exe --generate-self-signed --load-privkey .\private.key --template .\cert.cnf --outfile .\public.crt
+mkdir $env:USERPROFILE\mc\certs\CAs
+cp  $env:USERPROFILE\.minio\certs\public.crt $env:USERPROFILE\mc\certs\CAs
+certutil -addstore ROOT $env:USERPROFILE\.minio\certs\public.crt
 
 mkdir C:\minio\data1
 mkdir C:\minio\data2
@@ -67,13 +68,16 @@ echo @"
   <executable>minio.exe</executable>
   <env name="MINIO_ROOT_USER" value="minioadminuser"/>
   <env name="MINIO_ROOT_PASSWORD" value="minioadminuser"/>
+  <env name="MINIO_PROMETHEUS_AUTH_TYPE" value="public" />
   <arguments>server C:\minio\data1 C:\minio\data2 C:\minio\data3 C:\minio\data4</arguments>
   <logmode>rotate</logmode>
   <serviceaccount>
-  <username>localhost\Administrator</username>
-  <password>Password00!</password>
-  <allowservicelogon>true</allowservicelogon>
-</serviceaccount>
+    <domain>$Env:COMPUTERNAME</domain>
+    <user>Administrator</user>
+    <password>Password00!</password>
+    <allowservicelogon>true</allowservicelogon>
+  </serviceaccount>
+
 </service>
 "@ >minio-service.xml
 ./minio-service.exe install
@@ -81,8 +85,13 @@ start-service minio
 Start-Sleep 10
 
 C:\minio\mc.exe alias rm local
-C:\minio\mc.exe alias set local http://localhost:9000 minioadminuser minioadminuser
+$env:URLHOST = $Env:COMPUTERNAME
+$env:URLHOST = $Env:URLHOST+=":9000"
+write-host $env:URLHOST
+
+C:\minio\mc.exe alias set local https://$env:URLHOST minioadminuser minioadminuser
 C:\minio\mc.exe admin info local
-Write-Host Done. credential is minioadminuser.Hit any key -NoNewLine
+start https://$env:URLHOST
+Write-Host Done. credential is minioadminuser. Hit any key -NoNewLine
 [Console]::ReadKey() | Out-Null
 
