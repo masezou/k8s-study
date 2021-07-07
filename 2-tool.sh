@@ -69,7 +69,7 @@ echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
 
 # Install kubectx and kubens
-KUBECTX=0.9.3
+KUBECTX=0.9.4
 if [ ! -f /usr/local/bin/kubectx ]; then
 if [ ${ARCH} = amd64 ]; then
 	ARCH=x86_64
