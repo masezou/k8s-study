@@ -157,3 +157,8 @@ echo "Confirm wordpress pod and mysql pod are running with kubectl get pod -A"
 echo "run kubectl -n ${NAMESPACE} get svc"
 echo "Open your browser http://external ip)"
 echo "You can test access with lynx  http://external ip)" 
+echo "or"
+echo "kubectl port-forward --address 0.0.0.0 svc/wordpress 8081:80 -n wordpress-hostpath"
+echo "http://${LOCALIPADDR}:8081"
+
+
