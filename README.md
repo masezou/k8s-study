@@ -8,7 +8,7 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 # Requirement
 
--Ubuntu Linux Server 20.04.2 4vCPU 8GB RAM 50GB above
+-Ubuntu Linux Server  20.04.2 4vCPU 8GB RAM 50GB above (Don't install any other extra packages) on vSphere
 
 -Windows 10 4vCPU 16GB RAM 50GB above
  - ubuntu Server 20.04 in MS Appstore 
