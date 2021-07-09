@@ -70,6 +70,7 @@ if [ ${KENELRTVL} != 0 ]; then
     KINDVER=0.11.1
 	if [ ! -f /usr/local/bin/kind ]; then
 	apt -y install docker.io
+	systemctl enable --now docker
 	curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v${KINDVER}/kind-linux-${ARCH}
 	chmod +x ./kind
 	mv ./kind /usr/local/bin/kind
