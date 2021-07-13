@@ -53,21 +53,6 @@ echo ${LOCALIPADDR}
 
 #########################################################
 
-# Install kubectl
-if [ ! -f /usr/bin/kubectl ]; then
-apt update
-apt -y install apt-transport-https gnupg2 curl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-apt update
-#apt -y install kubectl
-apt-get install kubectl=1.19.11-00
-apt-mark hold kubectl
-kubectl completion bash >/etc/bash_completion.d/kubectl
-source /etc/bash_completion.d/kubectl
-echo 'export KUBE_EDITOR=vi' >>~/.bashrc
-fi
-
 # Install kubectx and kubens
 KUBECTX=0.9.4
 if [ ! -f /usr/local/bin/kubectx ]; then
