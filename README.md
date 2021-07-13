@@ -1,34 +1,66 @@
-# Kubestr
+# k8s-study
 
-## What is it?
+This is sample KIND deployment. This project might not maintenance for now.
 
-Kubestr is a collection of tools to discover, validate and evaluate your kubernetes storage options.
+# Features
 
-As adoption of kubernetes grows so have the persistent storage offerings that are available to users. The introduction of [CSI](https://kubernetes.io/blog/2019/01/15/container-storage-interface-ga/) (Container Storage Interface) has enabled storage providers to develop drivers with ease. In fact there are around a 100 different CSI drivers available today. Along with the existing in-tree providers, these options can make choosing the right storage difficult.
+Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
-Kubestr can assist in the following ways-
-- Identify the various storage options present in a cluster.
-- Validate if the storage options are configured correctly.
-- Evaluate the storage using common benchmarking tools like FIO.
+# Requirement
 
-[![asciicast](https://asciinema.org/a/7iJTbWKwdhPHNWYV00LIgx7gn.svg)](https://asciinema.org/a/7iJTbWKwdhPHNWYV00LIgx7gn)
+-Ubuntu Linux Server  20.04.2 4vCPU 8GB RAM 50GB above (Don't install any other extra packages) on vSphere
 
-## Using Kubestr
-### To install the tool -  
-- Ensure that the kubernetes context is set and the cluster is accessible through your terminal. (Does [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) work?)
-- Download the latest release [here](https://github.com/kastenhq/kubestr/releases/latest). 
-- Unpack the tool and make it an executable `chmod +x kubestr`.
+-Windows 10 4vCPU 16GB RAM 50GB above
+ - ubuntu Server 20.04 in MS Appstore 
+ - Docker Desktop (https://hub.docker.com/editions/community/docker-ce-desktop-windows)
+ - KIND (https://kind.sigs.k8s.io/docs/user/quick-start/)
+ - external Minio / NFS Server (Option).
 
-### To discover available storage options -
-- Run `./kubestr`
+# Installation
 
-### To run an FIO test - 
-- Run `./kubestr fio -s <storage class>`
-- Additional options like `--size` and `--fiofile` can be specified.
-- For more information visit our [fio](https://github.com/kastenhq/kubestr/blob/master/FIO.md) page.
+git clone this.
 
-### To check a CSI drivers snapshot and restore capabilities - 
-- Run `./kubestr csicheck -s <storage class> -v <volume snapshot class>`
 
-## Roadmap
-- In the future we plan to allow users to post their FIO results and compare to others.
+# Usage (Linux)
+
+* Linux
+```bash
+sudo -i
+git clone https://github.com/masezou/k8s-study
+cd k8s-study
+./0-minio-lnx.sh ; ./1-buildk8s-lnx.sh ; ./2-tool.sh ; ./3-configk8s.sh ; ./4-csi-storage.sh
+```
+
+# Usage (Windows 10)
+
+* Ubuntu on Windows 10
+```bash
+sudo -i
+mkdir .kube
+git clone git@github.com:masezou/k8s-study.git
+cd k8s-study
+cp 1-buildk8s-win.cmd /mnt/c/Users/[Username]/Desktop/
+cp config.yml /mnt/c/Users/[Username]/Desktop/
+```
+
+Execute 1-buildk8s-win.cmd in Windows 10 native environment.
+
+* Ubuntu on Windows 10
+
+You need to modify NFSSVR/NFSPATH in ./4-nfs-storage.sh 
+
+```bash
+sudo -i
+cp /mnt/c/Users/[Username]/.kube/config ~/.kube/
+chmod -R go-wr ~/.kube
+kubectl get node
+cd k8s-study
+sudo ./2-tool.sh
+./3-configk8s.sh
+./4-csi-storage.sh
+````
+
+# Note
+
+* 0-minio-win.ps1, You need to edit administrator password in the script, before running the script.
+* This environment is KIND environment. Metallb loadbalancer only affects to localhost. If you want to access from out of box. kubectl port-forward --address 0.0.0.0 service/hogehoge
