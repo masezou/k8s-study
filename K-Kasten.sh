@@ -120,7 +120,7 @@ echo "**************************************************************************
 echo "Next Step"
 echo "Confirm kasten is running with kubectl get pods --namespace kasten-io"
 echo "kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000"
-echo "Open your browser https://${LOCALIPADDR}:8080/k10/#/"
+echo "Open your browser http://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
 echo "kubectl --namespace kasten-io get svc"
 echo "Open your browser http://External-IP/k10"
