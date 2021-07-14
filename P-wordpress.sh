@@ -1,4 +1,21 @@
 #!/usr/bin/env bash
+#### LOCALIP #########
+ip address show ens160 >/dev/null
+retval=$?
+if [ ${retval} -eq 0 ]; then
+        LOCALIPADDR=`ip -f inet -o addr show ens160 |cut -d\  -f 7 | cut -d/ -f 1`
+else
+  ip address show ens192 >/dev/null
+  retval2=$?
+  if [ ${retval2} -eq 0 ]; then
+        LOCALIPADDR=`ip -f inet -o addr show ens192 |cut -d\  -f 7 | cut -d/ -f 1`
+  else
+        LOCALIPADDR=`ip -f inet -o addr show eth0 |cut -d\  -f 7 | cut -d/ -f 1`
+  fi
+fi
+echo ${LOCALIPADDR}
+
+
 NAMESPACE=wordpress-hostpath
 
 kubectl create namespace ${NAMESPACE}
