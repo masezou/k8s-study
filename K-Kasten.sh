@@ -123,7 +123,7 @@ echo "kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gatew
 echo "Open your browser https://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
 echo "kubectl --namespace kasten-io get svc"
-echo "Open your browser https://External-IP/k10"
+echo "Open your browser http://External-IP/k10"
 echo "then input login token"
 echo "Note:"
 echo 
