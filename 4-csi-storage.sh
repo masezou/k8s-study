@@ -60,7 +60,7 @@ if [ ${NODECOUNT} != 2 ]; then
 fi
 
 
-SNAPSHOTTER_VERSION=v3.0.3
+SNAPSHOTTER_VERSION=v4.1.1
 
 # Apply VolumeSnapshot CRDs
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${SNAPSHOTTER_VERSION}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
@@ -72,9 +72,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snaps
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${SNAPSHOTTER_VERSION}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
 
 ##Install the CSI Hostpath Driver
-git clone https://github.com/kubernetes-csi/csi-driver-host-path.git  -b v1.7.2
+git clone https://github.com/kubernetes-csi/csi-driver-host-path.git
 cd csi-driver-host-path
-./deploy/kubernetes-1.18/deploy.sh
+./deploy/kubernetes-1.21/deploy.sh
 kubectl apply -f ./examples/csi-storageclass.yaml
 kubectl patch storageclass csi-hostpath-sc \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'

@@ -96,7 +96,7 @@ if [  -f /usr/local/bin/kind ]; then
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
 
-cat <<EOF | kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s --config=-
+cat <<EOF | kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 containerdConfigPatches:
@@ -142,7 +142,7 @@ curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 apt update
 #apt -y install kubectl
-apt-get install kubectl=1.19.11-00
+apt-get install kubectl=1.21.1-00
 apt-mark hold kubectl
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
