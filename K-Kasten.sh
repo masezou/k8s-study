@@ -81,11 +81,11 @@ cd ..
 rm -rf temp
 fi
 
-# Install Kasten
+# Pre-req Kasten
 helm repo add kasten https://charts.kasten.io/
 helm repo update
 
-kubectl get sc | grep hostpath
+kubectl get volumesnapshotclass | grep csi-hostpath-snapclass
 retval2=$?
 if [ ${retval2} -eq 0 ]; then
 kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
@@ -94,6 +94,8 @@ fi
 
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
+
+# Install Katen
 kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io \
 --set services.securityContext.runAsUser=0 \

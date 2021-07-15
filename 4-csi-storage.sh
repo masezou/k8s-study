@@ -81,10 +81,9 @@ kubectl patch storageclass csi-hostpath-sc \
 kubectl patch storageclass standard \
     -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 cd ..
-kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
-    k10.kasten.io/is-snapshot-class=true
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 
+kubectl get volumesnapshotclass
 kubectl get all -A
 kubectl get sc
 kubectl get VolumeSnapshotClass
