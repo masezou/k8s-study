@@ -84,6 +84,7 @@ EOF
 
 # metric server
 #kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl apply -f components.yaml
 
 # Kuberntes Dashboard
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
