@@ -83,7 +83,6 @@ kubectl patch storageclass standard \
 cd ..
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 
-kubectl get volumesnapshotclass
 kubectl get all -A
 kubectl get sc
 kubectl get VolumeSnapshotClass
