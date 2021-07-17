@@ -95,7 +95,7 @@ fi
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 
-# Install Katen
+# Install Kasten
 kubectl create namespace kasten-io
 helm install k10 kasten/k10 --namespace=kasten-io \
 --set services.securityContext.runAsUser=0 \
