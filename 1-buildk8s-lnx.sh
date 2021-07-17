@@ -67,10 +67,12 @@ echo ${LOCALIPADDR}
 uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
-    KINDVER=0.11.1
-	if [ ! -f /usr/local/bin/kind ]; then
+	if [ ! -f /usr/bin/docker ]; then
 	apt -y install docker.io
 	systemctl enable --now docker
+    fi
+    KINDVER=0.11.1
+	if [ ! -f /usr/local/bin/kind ]; then
 	curl -s -Lo ./kind https://github.com/kubernetes-sigs/kind/releases/download/v${KINDVER}/kind-linux-${ARCH}
 	chmod +x ./kind
 	mv ./kind /usr/local/bin/kind
@@ -141,8 +143,8 @@ apt -y install apt-transport-https gnupg2 curl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
 apt update
-#apt -y install kubectl
-apt-get install kubectl=1.21.1-00
+KUBECTLVER=1.21.1-00
+apt -y install -qy kubectl=${KUBECTLVER}
 apt-mark hold kubectl
 kubectl completion bash >/etc/bash_completion.d/kubectl
 source /etc/bash_completion.d/kubectl
