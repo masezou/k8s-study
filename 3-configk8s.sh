@@ -83,10 +83,42 @@ data:
 EOF
 
 # metric server
-#kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+# Modified componets.yaml
 kubectl apply -f components.yaml
 
 # Kuberntes Dashboard
+
+kubectl create namespace kubernetes-dashboard
+mkdir certs
+cd certs
+openssl genrsa -out dashboard.key 2048
+cat <<EOF> openssl.conf
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+
+[req_distinguished_name]
+C = US
+ST = VA
+L = Somewhere
+O = MyOrg
+OU = MyOU
+CN = MyServerName
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+IP.1 = 127.0.0.1
+DNS.1 = 127.0.0.1
+EOF
+openssl req -new -x509 -nodes -days 365 -key dashboard.key -out dashboard.crt -config openssl.conf
+kubectl delete secret kubernetes-dashboard-certs -n kubernetes-dashboard
+kubectl create secret generic kubernetes-dashboard-certs --from-file=dashboard.key --from-file=dashboard.crt -n kubernetes-dashboard
+cd ..
+
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
 cat <<EOF | kubectl apply -f -
 apiVersion: v1
@@ -109,6 +141,28 @@ subjects:
   name: admin-user
   namespace: kubernetes-dashboard
 EOF
+
+# Dashboard service
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: dashboard-service-lb
+  namespace: kubernetes-dashboard
+spec:
+  type: LoadBalancer
+  ports:
+    - name: dashboard-service-lb
+      protocol: TCP
+      port: 443
+      nodePort: 30085
+      targetPort: 8443
+  selector:
+    k8s-app: kubernetes-dashboard
+EOF
+
 kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}" > dashboard.token
 echo "" >> dashboard.token
 cat dashboard.token 
