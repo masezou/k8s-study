@@ -169,6 +169,50 @@ C:\minio\mc.exe admin policy add local/ consoleAdmin admin.json
 del C:\minio\admin.json
 C:\minio\mc.exe admin policy set local/ consoleAdmin user=console
 
+echo @"
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+			"Action": [
+				"admin:ServerInfo"
+			],
+			"Effect": "Allow",
+			"Sid": ""
+		},
+		{
+			"Action": [
+				"s3:ListenBucketNotification",
+				"s3:PutBucketNotification",
+				"s3:GetBucketNotification",
+				"s3:ListMultipartUploadParts",
+				"s3:ListBucketMultipartUploads",
+				"s3:ListBucket",
+				"s3:HeadBucket",
+				"s3:GetObject",
+				"s3:GetBucketLocation",
+				"s3:AbortMultipartUpload",
+				"s3:CreateBucket",
+				"s3:PutObject",
+				"s3:DeleteObject",
+				"s3:DeleteBucket",
+				"s3:PutBucketPolicy",
+				"s3:DeleteBucketPolicy",
+				"s3:GetBucketPolicy"
+			],
+			"Effect": "Allow",
+			"Resource": [
+				"arn:aws:s3:::*"
+			],
+			"Sid": ""
+		}
+	]
+}
+"@ >s3user.json
+$targetpath = "C:\minio\s3user.json"
+(Get-Content $targetpath) -Join "`r`n" | Set-Content $targetpath
+C:\minio\mc.exe admin policy add local/ s3user s3user.json
+del C:\minio\s3user.json
+
 $env:CONSOLE_MINIO_SERVER = $Env:COMPUTERNAME
 $env:CONSOLE_MINIO_SERVER = $Env:CONSOLE_MINIO_SERVER+=":9000"
 $env:CONSOLE_MINIO_SERVER = "https://"+$Env:CONSOLE_MINIO_SERVER
