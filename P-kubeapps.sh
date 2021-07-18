@@ -18,7 +18,7 @@ echo "" >>kubeapps.token
 cat kubeapps.token
 echo ""
 echo "*************************************************************************************"
-echo "Access http://External-IP/
+echo "Access http://External-IP/"
 echo "or"
 echo "kubectl port-forward -n kubeapps svc/kubeapps 8081:80"
 echo "or"
