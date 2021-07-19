@@ -108,6 +108,7 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set injectKanisterSidecar.enabled=true \
 --set auth.tokenAuth.enabled=true \
 --set externalGateway.create=true \
+--set ingress.create=true \
 --set ingress.create=true
 
 echo "Following is login token"
