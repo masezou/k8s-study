@@ -20,4 +20,5 @@ else
 fi
 
 apt-get -y install ubuntu-desktop open-vm-tools-desktop
+systemctl restart open-vm-tools.service
 init 5
