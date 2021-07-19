@@ -19,5 +19,5 @@ else
     echo "Ubuntu 20.04=OK"
 fi
 
-apt-get -y install ubuntu-desktop
+apt-get -y install ubuntu-desktop open-vm-tools-desktop
 init 5
