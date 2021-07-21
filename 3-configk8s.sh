@@ -173,12 +173,13 @@ echo "" >>Your_kind_kubeconfig-`hostname`
 #kubectl config use-context kind-k10-demo
 kubectl config get-contexts
 
+EXTERNALIP=`kubectl -n kubernetes-dashboard get service dashboard-service-lb| awk '{print $4}' | tail -n 1`
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
 echo "you can access Kubernetes dashboard"
 echo "Option 1"
-echo "then access https://External-IP/#/login"
+echo "then access https://${EXTERNALIP}/#/login from local browser"
 echo "Option 2"
 echo "run kubectl port-forward --address 0.0.0.0 svc/dashboard-service-lb 8082:443 -n kubernetes-dashboard"
 echo "then access https://$LOCALIPADDR}:8082/#/login"

@@ -16,9 +16,10 @@ kubectl create clusterrolebinding kubeapps-operator --clusterrole=cluster-admin 
 kubectl get secret $(kubectl get serviceaccount kubeapps-operator -o jsonpath='{range .secrets[*]}{.name}{"\n"}{end}' | grep kubeapps-operator-token) -o jsonpath='{.data.token}' -o go-template='{{.data.token | base64decode}}' > kubeapps.token
 echo "" >>kubeapps.token
 cat kubeapps.token
+EXTERNALIP=`kkubectl -n kubeapps get service kubeapps | awk '{print $4}' | tail -n 1`
 echo ""
 echo "*************************************************************************************"
-echo "Access http://External-IP/"
+echo "Access http://${EXTERNALIP}/ from your local browser"
 echo "or"
 echo "kubectl port-forward -n kubeapps svc/kubeapps 8081:80"
 echo "or"

@@ -118,6 +118,8 @@ echo "" >> k10-k10.token
 cat k10-k10.token
 echo
 
+EXTERNALIP=`kubectl -n kasten-io get ingress | awk '{print $4}' | tail -n 1`
+
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
@@ -125,8 +127,7 @@ echo "Confirm kasten is running with kubectl get pods --namespace kasten-io"
 echo "kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000"
 echo "Open your browser http://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
-echo "kubectl --namespace kasten-io get svc"
-echo "Open your browser http://External-IP/k10"
+echo "Open http://${EXTERNALIP}/10" from local browsera"
 echo "then input login token"
 echo "Note:"
 echo 
