@@ -96,15 +96,15 @@ New-NetFirewallRule -DisplayName "Allow-Inbound-TCP9000" -Direction Inbound -Pro
 New-NetFirewallRule -DisplayName "Allow-Inbound-TCP9000" -Direction Inbound -Protocol TCP -LocalPort 9091 -Action Allow
 cd C:\minio
 Invoke-WebRequest -Uri https://github.com/minio/console/releases/latest/download/console-windows-amd64.exe -OutFile console.exe
-Invoke-WebRequest -Uri https://github.com/prometheus/prometheus/releases/download/v2.28.0/prometheus-2.28.0.windows-amd64.zip -OutFile prometheus-2.28.0.windows-amd64.zip
+Invoke-WebRequest -Uri https://github.com/prometheus/prometheus/releases/download/v2.28.1/prometheus-2.28.1.windows-amd64.zip -OutFile prometheus-2.28.1.windows-amd64.zip
 Invoke-WebRequest -Uri https://github.com/winsw/winsw/releases/download/v2.11.0/WinSW.NET461.exe -OutFile console-service.exe
 
 mkdir C:\minio\prometheus
 cd C:\minio\prometheus
-Expand-Archive -Path C:\minio\prometheus-2.28.0.windows-amd64.zip -DestinationPath C:\minio\prometheus
+Expand-Archive -Path C:\minio\prometheus-2.28.1.windows-amd64.zip -DestinationPath C:\minio\prometheus
 
 cp C:\minio\console-service.exe C:\minio\prometheus\prometheus-service.exe
-cp C:\minio\prometheus\prometheus-2.28.0.windows-amd64\prometheus.exe C:\minio\prometheus\
+cp C:\minio\prometheus\prometheus-2.28.1.windows-amd64\prometheus.exe C:\minio\prometheus\
 
 $env:TARGETHOST = $Env:COMPUTERNAME
 $env:TARGETHOST = $Env:TARGETHOST+=":9000"
