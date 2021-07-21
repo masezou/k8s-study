@@ -138,7 +138,7 @@ mc admin info local/
 
 # Prometheus
  if [ ! -f /usr/local/prometheus/prometheus-server/prometheus-server ]; then
-PROMETHEUSVER=2.28.0
+PROMETHEUSVER=2.28.1
 mkdir -p /usr/local/prometheus
 cd /usr/local/prometheus
 curl -OL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUSVER}/prometheus-${PROMETHEUSVER}.linux-${ARCH}.tar.gz
