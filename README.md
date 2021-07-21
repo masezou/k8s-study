@@ -8,7 +8,7 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 # Requirement
 
--Ubuntu Linux Server  20.04.2 4vCPU 8GB RAM 50GB above (Don't install any other extra packages) on vSphere
+-Ubuntu Linux Server 20.04.2 amd64 or arm64 4vCPU 8GB RAM 50GB above (Don't install any other extra packages) on vSphere VM.
 
 If you are using ESX VM and you would like to test CNI,Loadbalancer, Ingress, you can install Xwindow with desktop.sh. When you create VM, you can add VRAM, you can use Xwindow with high resolution.
 
@@ -35,7 +35,7 @@ cd k8s-study
 
 # Usage (Windows 10)
 
-* Ubuntu on Windows 10
+* Ubuntu on Windows 10 ... It is not tested well...
 ```bash
 sudo -i
 mkdir .kube
