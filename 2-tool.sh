@@ -116,7 +116,7 @@ source /etc/bash_completion.d/skaffold
 fi
 
 # Misc
-apt -y install postgresql-client mysql-client jq lynx
+apt -y install postgresql-contrib postgresql-client mysql-client jq lynx
 
 echo ""
 echo "*************************************************************************************"

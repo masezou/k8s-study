@@ -93,7 +93,18 @@ fi
 
 # Bulding Kind Cluster
 if [  -f /usr/local/bin/kind ]; then
-
+#Kind 0.7.0
+#kind create cluster --name k10-demo --image kindest/node:v1.11.10 --wait 600s
+#Kind 0.8.0
+#kind create cluster --name k10-demo --image kindest/node:v1.12.10 --wait 600s
+#Kind 0.9.0
+#kind create cluster --name k10-demo --image kindest/node:v1.13.12 --wait 600s
+#Kind 0.11.1
+#kind create cluster --name k10-demo --image kindest/node:v1.14.10 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.15.12 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.17.17 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.18.19 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
