@@ -302,4 +302,4 @@ echo "For Test:"
 echo "mc mb --with-lock local/test01"
 echo "mc ls local/"
 
-chmod -x 0-minio-lnx.sh
+chmod -x ./0-minio-lnx.sh

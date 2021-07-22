@@ -181,4 +181,4 @@ echo "**************************************************************************
 echo "Next Step"
 echo "Kubernetes was build with kind"
 
-chmod -x 1-buildk8s-lnx.sh
+chmod -x ./1-buildk8s-lnx.sh

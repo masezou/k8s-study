@@ -92,4 +92,4 @@ echo "**************************************************************************
 echo "There is no more action. following your current storage class"
 kubectl get storageclass
 
-chmod -x 4-csi-storage.sh
+chmod -x ./4-csi-storage.sh

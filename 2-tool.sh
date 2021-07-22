@@ -126,4 +126,4 @@ echo "Next Step"
 echo "Kubernetes tools was installed in Ubuntu"
 echo "please re-login again"
 
-chmod -x 2-tool.sh
+chmod -x ./2-tool.sh
