@@ -92,6 +92,13 @@ kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
     k10.kasten.io/is-snapshot-class=true
 fi
 
+kubectl get volumesnapshotclass | grep csi-rbdplugin-snapclass
+retval3=$?
+if [ ${retval3} -eq 0 ]; then
+kubectl annotate volumesnapshotclass csi-rbdplugin-snapclass \
+    k10.kasten.io/is-snapshot-class=true
+fi
+
 curl https://docs.kasten.io/tools/k10_primer.sh | bash
 rm k10primer.yaml
 
@@ -110,6 +117,25 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set externalGateway.create=true \
 --set ingress.create=true \
 --set ingress.create=true
+
+# define NFS storage
+kubectl get csidrivers.storage.k8s.io | grep nfs
+retval4=$?
+if [ ${retval4} -eq 0 ]; then
+cat <<EOF | kubectl apply -n kasten-io -f -
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+   name: kastenbackup-pvc
+spec:
+   storageClassName: nfs-csi
+   accessModes:
+      - ReadWriteMany
+   resources:
+      requests:
+         storage: 20Gi
+EOF
+fi
 
 echo "Following is login token"
 sa_secret=$(kubectl get serviceaccount k10-k10 -o jsonpath="{.secrets[0].name}" --namespace kasten-io)

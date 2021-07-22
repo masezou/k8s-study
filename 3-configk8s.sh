@@ -186,3 +186,5 @@ echo "then access https://$LOCALIPADDR}:8082/#/login"
 echo "option 3"
 echo "with kubectl proxy"
 echo "http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login"
+
+chmod -x 3-configk8s.sh

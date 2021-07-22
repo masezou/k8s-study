@@ -104,3 +104,4 @@ echo "There is no more action. following your current storage class"
 kubectl get storageclass
 echo "NFS storage was configurd"
 
+chmod -x 5-nfs-storage.sh

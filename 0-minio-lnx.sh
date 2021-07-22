@@ -301,3 +301,5 @@ echo "source /etc/bash_completion.d/mc.sh"
 echo "For Test:"
 echo "mc mb --with-lock local/test01"
 echo "mc ls local/"
+
+chmod -x 0-minio-lnx.sh
