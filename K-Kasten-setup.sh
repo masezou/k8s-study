@@ -54,5 +54,5 @@ EOF
 kubectl -n kasten-io create -f minio-cred.yaml
 kubectl -n kasten-io create -f minio-profile.yaml
 sleep 10
-kubectl get profiles.config.kio.kasten.io
+kubectl -n kasten-io get profiles.config.kio.kasten.io
 
