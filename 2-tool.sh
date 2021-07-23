@@ -85,7 +85,6 @@ export GOPATH=$HOME/go
 echo "export GOPATH=$HOME/go" >>/etc/profile
 echo "export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin" >>/etc/profile
 export PATH=$PATH:/usr/lib/go/bin:$GOPATH/bin
-cd
 fi
 if [ ! -f /root/go/bin/kubecolor ]; then
 go get github.com/dty1er/kubecolor/cmd/kubecolor
