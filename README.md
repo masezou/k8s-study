@@ -2,6 +2,8 @@
 
 This is sample KIND deployment. This project might not maintenance for now.
 
+![image](https://user-images.githubusercontent.com/624501/126793662-60815904-cb7c-4897-a26c-cc6a684916dc.png)
+
 # Features
 
 Kind deployment on Linux and Windows. This includes metallb and dashboard.
