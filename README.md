@@ -68,5 +68,6 @@ sudo ./2-tool.sh
 
 # Note
 
+* Loadbalancer and ingress was configured but the magic is only in Kind/Docker network. You can feel loadbalancer and ingress if you try to install desktop system. Easist way is run P-desktop.sh.
 * 0-minio-win.ps1, You need to edit administrator password in the script, before running the script.
 * This environment is KIND environment. Metallb loadbalancer only affects to localhost. If you want to access from out of box. kubectl port-forward --address 0.0.0.0 service/hogehoge
