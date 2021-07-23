@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-NAMESPACE=wordpress-hostpath
+NAMESPACE=wordpress
 
 kubectl create namespace ${NAMESPACE}
 mkdir ${NAMESPACE}
