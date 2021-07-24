@@ -53,6 +53,9 @@ echo ${LOCALIPADDR}
 
 #########################################################
 
+# htpasswd for basic auth
+apt -y install apache2-utils
+
 # Install K10-tools
 TOOLSVER=4.0.8
 if [ ! -f /usr/local/bin/k10tools ]; then
