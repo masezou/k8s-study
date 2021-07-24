@@ -67,19 +67,21 @@ kubectl create clusterrolebinding backupview-rolebinding --clusterrole=k10-confi
 
 
 # Configure local minio
-cat << EOF > kubectl -n kasten-io create -f -
-cat <<EOF | kubectl apply -f -
+AWS_ACCESS_KEY_ID=` echo -n "minioadminuser" | base64`
+AWS_SECRET_ACCESS_KEY_ID=` echo -n "minioadminuser" | base64`
+
+cat << EOF | kubectl -n kasten-io create -f -
 apiVersion: v1
 data:
-  aws_access_key_id: bWluaW9hZG1pbnVzZXI=
-  aws_secret_access_key: bWluaW9hZG1pbnVzZXI=
+  aws_access_key_id: ${AWS_ACCESS_KEY_ID}
+  aws_secret_access_key: ${AWS_SECRET_ACCESS_KEY_ID}
 kind: Secret
 metadata:
   name: k10-s3-secret
   namespace: kasten-io
 type: secrets.kanister.io/aws
 EOF
-cat << EOF > kubectl -n kasten-io create -f -
+cat << EOF | kubectl -n kasten-io create -f -
 apiVersion: config.kio.kasten.io/v1alpha1
 kind: Profile
 metadata:
@@ -103,6 +105,6 @@ spec:
       skipSSLVerify: true
       region: us-east-1
 EOF
-sleep 10
+sleep 5
 kubectl -n kasten-io get profiles.config.kio.kasten.io
 
