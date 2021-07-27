@@ -176,9 +176,15 @@ data:
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
 
+# Private registory frontend
+docker run -d --name repositoryfe -e ENV_DOCKER_REGISTRY_HOST=${LOCALIPADDR} -e ENV_DOCKER_REGISTRY_PORT=5000 -p 18082:80  ekazakov/docker-registry-frontend
+
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
+echo "Private registory fe"
+echo "http://${LOCALIPADDR}:18082"
+
 echo "Kubernetes was build with kind"
 
 chmod -x ./1-buildk8s-lnx.sh
