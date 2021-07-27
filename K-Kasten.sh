@@ -114,11 +114,11 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set prometheus.server.securityContext.runAsGroup=0 \
 --set prometheus.server.securityContext.runAsNonRoot=false \
 --set prometheus.server.securityContext.fsGroup=0 \
+--set global.persistence.size=40G \
 --set global.persistence.storageClass=csi-hostpath-sc \
 --set injectKanisterSidecar.enabled=true \
 --set auth.tokenAuth.enabled=true \
 --set externalGateway.create=true \
---set ingress.create=true \
 --set ingress.create=true
 
 # define NFS storage
