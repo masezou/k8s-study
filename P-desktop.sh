@@ -19,7 +19,7 @@ else
     echo "Ubuntu 20.04=OK"
 fi
 
-apt -y install open-vm-tools-desktop gnome-session gnome-terminal xinit gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
+apt -y install open-vm-tools-desktop gnome-session gnome-terminal xserver-xorg-core xinit gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
 #apt -y install ubuntu-desktop-minimal open-vm-tools-desktop
 fc-cache -fv
 apt clean
