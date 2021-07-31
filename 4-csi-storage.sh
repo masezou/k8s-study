@@ -52,7 +52,7 @@ fi
 echo ${LOCALIPADDR}
 
 #########################################################
-
+BASEPWD=`pwd`
 
 SNAPSHOTTER_VERSION=v4.1.1
 
@@ -86,4 +86,5 @@ echo "**************************************************************************
 echo "There is no more action. following your current storage class"
 kubectl get storageclass
 
+cd ${BASEPWD}
 chmod -x ./4-csi-storage.sh
