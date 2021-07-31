@@ -19,8 +19,11 @@ else
     echo "Ubuntu 20.04=OK"
 fi
 
-apt-get -y install ubuntu-desktop open-vm-tools-desktop
+apt -y install open-vm-tools-desktop gnome-session gnome-terminal xinit gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
+#apt -y install ubuntu-desktop-minimal open-vm-tools-desktop
 apt clean
+systemctl stop NetworkManager
+systemctl disable NetworkManager
 systemctl enable open-vm-tools.service
 systemctl restart open-vm-tools.service
 init 5
