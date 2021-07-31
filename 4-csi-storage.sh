@@ -53,12 +53,6 @@ echo ${LOCALIPADDR}
 
 #########################################################
 
-NODECOUNT=`kubectl get node| wc -l`
-if [ ${NODECOUNT} != 2 ]; then
-        echo "multinode is not supported"
-        exit 255
-fi
-
 
 SNAPSHOTTER_VERSION=v4.1.1
 

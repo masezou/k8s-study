@@ -132,6 +132,9 @@ nodes:
     nodeRegistration:
       kubeletExtraArgs:
         node-labels: "ingress-ready=true"
+- role: worker
+- role: worker
+- role: worker
   extraPortMappings:
   - containerPort: 80
     hostPort: 80
