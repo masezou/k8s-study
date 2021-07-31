@@ -19,11 +19,12 @@ else
     echo "Ubuntu 20.04=OK"
 fi
 
-apt -y install gnome-session gnome-terminal gnome-control-center open-vm-tools-desktop xinit fonts-takao fonts-ipafont fonts-ipaexfont firefox
+apt -y install open-vm-tools-desktop xinit
+apt -y --no-install-recommends install gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
 fc-cache -fv
 apt clean
-systemctl stop NetworkManager
 systemctl disable NetworkManager
+systemctl stop NetworkManager
 systemctl enable open-vm-tools.service
 systemctl restart open-vm-tools.service
 init 5
