@@ -26,14 +26,14 @@ retvalvga=$?
 if [ ${retvalvga} -eq 0 ]; then
  # VMware VM
  apt -y --no-install-recommends install xinit gdm3 xserver-xorg-video-vmware gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
- echo "VMware VGA was configgured"
+ echo "VMware VGA was configured"
 else
 # Non VMware
  apt -y install xinit
  apt -y --no-install-recommends install gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
  systemctl disable NetworkManager
  systemctl stop NetworkManager
- echo "NON-VMware VGA was configgured"
+ echo "Non-VMware VGA was configured"
 fi
 fc-cache -fv
 apt -y install open-vm-tools-desktop
