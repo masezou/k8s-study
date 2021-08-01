@@ -89,6 +89,7 @@ kubectl get pvc,pv
 kubectl create -f wordpress.yaml -n ${NAMESPACE}
 kubectl get pod -l app=wordpress -n ${NAMESPACE}
 kubectl create -f wordpress-service.yaml -n ${NAMESPACE}
+kubectl label statefulset mysql-release  app=wordpress -n ${NAMESPACE}
 kubectl get svc -l app=wordpress -n ${NAMESPACE}
 kubectl get pod -n ${NAMESPACE}
 cd ..
