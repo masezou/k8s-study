@@ -19,12 +19,25 @@ else
     echo "Ubuntu 20.04=OK"
 fi
 
-apt -y install open-vm-tools-desktop xinit
-apt -y --no-install-recommends install gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
+
+lspci | grep VGA |grep VMware >/dev/null
+retvalvga=$?
+
+if [ ${retvalvga} -eq 0 ]; then
+ # VMware VM
+ apt -y --no-install-recommends install xinit gdm3 xserver-xorg-video-vmware gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
+ echo "VMware VGA was configgured"
+else
+# Non VMware
+ apt -y install xinit
+ apt -y --no-install-recommends install gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
+ systemctl disable NetworkManager
+ systemctl stop NetworkManager
+ echo "NON-VMware VGA was configgured"
+fi
 fc-cache -fv
+apt -y install open-vm-tools-desktop
 apt clean
-systemctl disable NetworkManager
-systemctl stop NetworkManager
 systemctl enable open-vm-tools.service
 systemctl restart open-vm-tools.service
 init 5
