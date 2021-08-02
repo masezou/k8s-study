@@ -5,5 +5,5 @@ kubectl --namespace kasten-io apply -f \
 
 #kubectl --namespace mysql annotate statefulset/mysql-release \
 #    kanister.kasten.io/blueprint=mysql-blueprint
-kubectl --namespace wordpress-hostpath annotate statefulset/mysql-release \
+kubectl --namespace wordpress annotate statefulset/mysql-release \
     kanister.kasten.io/blueprint=mysql-blueprint
