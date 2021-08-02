@@ -35,10 +35,10 @@ else
 # Non VMware
  apt -y install xinit
  apt -y --no-install-recommends install gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
- systemctl disable NetworkManager
- systemctl stop NetworkManager
  echo "Non-VMware VGA was configured"
 fi
+systemctl disable NetworkManager
+systemctl stop NetworkManager
 fc-cache -fv
 echo "export LIBGL_ALWAYS_INDIRECT=1" > /etc/profile.d/remotex.sh
 apt clean
