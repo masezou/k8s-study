@@ -6,8 +6,12 @@ MINIONAMESPACE=minio-demo
 helm repo add minio https://helm.min.io/
 helm repo update
 kubectl create namespace ${MINIONAMESPACE}
+
+
+# https://github.com/minio/charts
 helm install --generate-name minio/minio --namespace=${MINIONAMESPACE} \
  --set accessKey=minioadminuser,secretKey=minioadminuser \
+ --set persistence.size=100G \
  --set service.type=LoadBalancer \
  --set securityContext.enabled=false
 SVCNAME=`kubectl -n ${MINIONAMESPACE} get service -o jsonpath='{.items[*].metadata.name}'`
