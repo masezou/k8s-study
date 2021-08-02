@@ -114,6 +114,15 @@ skaffold completion bash >/etc/bash_completion.d/skaffold
 source /etc/bash_completion.d/skaffold
 fi
 
+# Install Minio client
+if [ ! -f /usr/local/bin/mc ]; then
+curl -OL https://dl.min.io/client/mc/release/linux-${ARCH}/mc
+mv mc /usr/local/bin/
+chmod +x /usr/local/bin/mc
+echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
+/usr/local/bin/mc >/dev/null
+fi
+
 # Misc
 apt -y install postgresql-contrib postgresql-client mysql-client jq lynx
 systemctl stop postgresql
