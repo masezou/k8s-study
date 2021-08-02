@@ -19,3 +19,4 @@ kubectl -n minio-demo get svc
 
 echo "Minio server  http://<External-IP>:9000"
 echo "mc alias set minio-demo http://172.18.255.202:9000 "$ACCESS_KEY" "$SECRET_KEY" --api s3v4"
+echo "mc admin info minio-demo"
