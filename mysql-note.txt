@@ -1,0 +1,9 @@
+echo Username: root
+echo Password : $(kubectl get secret --namespace wordpress-sample mysql-release -o jsonpath="{.data.mysql-root-password}" | base64 --decode)
+
+To connect to your database:
+  1. Run a pod that you can use as a client:
+      kubectl run mysql-release-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mysql:8.0.26-debian-10-r0 --namespace wordpress-sample --command -- bash
+  2. To connect to primary service (read/write):
+      mysql -h mysql-release.wordpress-sample.svc.cluster.local -uroot -p my_database
+
