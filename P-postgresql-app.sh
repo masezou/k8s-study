@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
-kubectl create namespace postgresql
-helm install --namespace postgresql postgres bitnami/postgresql --version 10.4.2  --set volumePermissions.enabled=true
+PGNAMESPACE=postgresql-app
+
+kubectl create namespace ${PGNAMESPACE}
+helm install --namespace ${PGNAMESPACE} postgres bitnami/postgresql --set volumePermissions.enabled=true
 cat << EOF > postgresql-hooks.yaml
 apiVersion: cr.kanister.io/v1alpha1
 kind: Blueprint
@@ -45,4 +47,4 @@ actions:
 EOF
 kubectl --namespace=kasten-io create -f postgresql-hooks.yaml
  kubectl annotate statefulset postgres-postgresql kanister.kasten.io/blueprint='postgresql-hooks' \
-     --namespace=postgresql
+     --namespace=${PGNAMESPACE}
