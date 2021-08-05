@@ -66,9 +66,9 @@ curl -OL https://dl.min.io/server/minio/release/linux-${ARCH}/minio
 mv minio  /usr/local/bin/
 chmod +x /usr/local/bin/minio
 # minio sysctl tuning
-curl -OL https://raw.githubusercontent.com/minio/minio/master/docs/deployment/kernel-tuning/sysctl.sh
-bash ./sysctl.sh
-rm ./sysctl.sh
+#curl -OL https://raw.githubusercontent.com/minio/minio/master/docs/deployment/kernel-tuning/sysctl.sh
+#bash ./sysctl.sh
+#rm ./sysctl.sh
 fi
 
 if [ ! -f /usr/local/bin/mc ]; then
