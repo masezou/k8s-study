@@ -2,7 +2,6 @@
 
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
-MINIOSECRETKEY=miniosecretkey
 LOCALHOSTNAME=`hostname`
 
 #########################################################
@@ -57,6 +56,7 @@ fi
 echo ${LOCALIPADDR}
 
 #########################################################
+BASEPWD=`pwd`
 
 if [ ! -f /usr/local/bin/minio ]; then
 mkdir -p /minio/data{1..4}
@@ -66,9 +66,7 @@ curl -OL https://dl.min.io/server/minio/release/linux-${ARCH}/minio
 mv minio  /usr/local/bin/
 chmod +x /usr/local/bin/minio
 # minio sysctl tuning
-#curl -OL https://raw.githubusercontent.com/minio/minio/master/docs/deployment/kernel-tuning/sysctl.sh
-#bash ./sysctl.sh
-#rm ./sysctl.sh
+#curl -OL https://raw.githubusercontent.com/minio/minio/master/docs/deployment/kernel-tuning/sysctl.sh | bash
 fi
 
 if [ ! -f /usr/local/bin/mc ]; then
@@ -118,13 +116,13 @@ cat <<EOT > /etc/default/minio
 # Volume to be used for MinIO server.
 MINIO_VOLUMES="/minio/data1 /minio/data2 /minio/data3 /minio/data4"
 # Use if you want to run MinIO on a custom port.
-MINIO_OPTS="--address :9000"
+MINIO_OPTS="--address :9000 --console-address :9001"
 # Access Key of the server.
 MINIO_ROOT_USER=${MINIO_ROOT_USER}
 # Secret key of the server.
 MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-# Use Prometheus
-MINIO_PROMETHEUS_AUTH_TYPE="public"
+# Minio Server for TLS
+MINIO_SERVER_URL=https://${LOCALIPADDR}:9000
 EOT
 fi
 
@@ -132,178 +130,73 @@ fi
 sed -i -e 's/minio-user/root/g' /etc/systemd/system/minio.service
 systemctl enable --now minio.service
 systemctl status minio.service --no-pager
-fi
-
 sleep 3
+
 mc alias rm local
 MINIO_ENDPOINT=https://${LOCALIPADDR}:9000
 mc alias set local ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4
-mc admin info local/
-
-# Prometheus
- if [ ! -f /usr/local/prometheus/prometheus-server/prometheus-server ]; then
-PROMETHEUSVER=2.28.1
-mkdir -p /usr/local/prometheus
-cd /usr/local/prometheus
-curl -OL https://github.com/prometheus/prometheus/releases/download/v${PROMETHEUSVER}/prometheus-${PROMETHEUSVER}.linux-${ARCH}.tar.gz
-tar zxf prometheus-${PROMETHEUSVER}.linux-${ARCH}.tar.gz
-mv prometheus-${PROMETHEUSVER}.linux-${ARCH} prometheus-server
-cd prometheus-server
-mv prometheus.yml prometheus.yml.org
-cat << EOT > prometheus.yml
-scrape_configs:
-- job_name: minio-job
-  metrics_path: /minio/v2/metrics/cluster
-  scheme: https
-  static_configs:
-  - targets: ['${LOCALIPADDR}:9000']
-  tls_config:
-   insecure_skip_verify: true
-EOT
-
-cat << EOT > /usr/lib/systemd/system/prometheus.service
-[Unit]
-Description=Prometheus - Monitoring system and time series database
-Documentation=https://prometheus.io/docs/introduction/overview/
-After=network-online.target
-After=network-online.target
-
-[Service]
-Type=simple
-ExecStart=/usr/local/prometheus/prometheus-server/prometheus \
-  --config.file=/usr/local/prometheus/prometheus-server/prometheus.yml \
-
-[Install]
-WantedBy=multi-user.target
-EOT
-systemctl enable --now prometheus.service
-systemctl status prometheus.service --no-pager
-fi
-
-
-### Console install
-if [ ! -f /usr/local/bin/console ]; then
-curl -OL https://github.com/minio/console/releases/latest/download/console-linux-${ARCH}
-mv console-linux-${ARCH}  /usr/local/bin/console
-chmod +x /usr/local/bin/console
-fi
-
-echo -e "console\n${MINIOSECRETKEY}" | mc admin user add local/
-cat > admin.json << EOF
-{
-	"Version": "2012-10-17",
-	"Statement": [{
-			"Action": [
-				"admin:*"
-			],
-			"Effect": "Allow",
-			"Sid": ""
-		},
-		{
-			"Action": [
-                "s3:*"
-			],
-			"Effect": "Allow",
-			"Resource": [
-				"arn:aws:s3:::*"
-			],
-			"Sid": ""
-		}
-	]
-}
-EOF
-mc admin policy add local/ consoleAdmin admin.json
-rm admin.json
-mc admin policy set local/ consoleAdmin user=console
 cat << EOF > s3user.json
 {
-	"Version": "2012-10-17",
-	"Statement": [{
-			"Action": [
-				"admin:ServerInfo"
-			],
-			"Effect": "Allow",
-			"Sid": ""
-		},
-		{
-			"Action": [
-				"s3:ListenBucketNotification",
-				"s3:PutBucketNotification",
-				"s3:GetBucketNotification",
-				"s3:ListMultipartUploadParts",
-				"s3:ListBucketMultipartUploads",
-				"s3:ListBucket",
-				"s3:HeadBucket",
-				"s3:GetObject",
-				"s3:GetBucketLocation",
-				"s3:AbortMultipartUpload",
-				"s3:CreateBucket",
-				"s3:PutObject",
-				"s3:DeleteObject",
-				"s3:DeleteBucket",
-				"s3:PutBucketPolicy",
-				"s3:DeleteBucketPolicy",
-				"s3:GetBucketPolicy"
-			],
-			"Effect": "Allow",
-			"Resource": [
-				"arn:aws:s3:::*"
-			],
-			"Sid": ""
-		}
-	]
+        "Version": "2012-10-17",
+        "Statement": [{
+                        "Action": [
+                                "admin:ServerInfo"
+                        ],
+                        "Effect": "Allow",
+                        "Sid": ""
+                },
+                {
+                        "Action": [
+                                "s3:ListenBucketNotification",
+                                "s3:PutBucketNotification",
+                                "s3:GetBucketNotification",
+                                "s3:ListMultipartUploadParts",
+                                "s3:ListBucketMultipartUploads",
+                                "s3:ListBucket",
+                                "s3:HeadBucket",
+                                "s3:GetObject",
+                                "s3:GetBucketLocation",
+                                "s3:AbortMultipartUpload",
+                                "s3:CreateBucket",
+                                "s3:PutObject",
+                                "s3:DeleteObject",
+                                "s3:DeleteBucket",
+                                "s3:PutBucketPolicy",
+                                "s3:DeleteBucketPolicy",
+                                "s3:GetBucketPolicy"
+                        ],
+                        "Effect": "Allow",
+                        "Resource": [
+                                "arn:aws:s3:::*"
+                        ],
+                        "Sid": ""
+                }
+        ]
 }
 EOF
 mc admin policy add local/ s3user s3user.json
 rm s3user.json
-
-# For https connection
-mkdir -p ~/.console/certs/CAs
-cp -f ~/.minio/certs/public.crt ~/.console/certs/CAs
-
-### add minio-console to systemctl
-if [ ! -f /etc/systemd/system/minio-console.service ]; then
-
-if [ ! -f /etc/default/minio-console ]; then
-cat <<EOT >> /etc/default/minio-console
-# Special opts
-CONSOLE_OPTS="--port 9091"
-# salt to encrypt JWT payload
-CONSOLE_PBKDF_PASSPHRASE=SECRET
-# required to encrypt JWT payload
-CONSOLE_PBKDF_SALT=SECRET
-# MinIO Endpoint
-CONSOLE_MINIO_SERVER=https://${LOCALIPADDR}:9000
-# Prometheus
-CONSOLE_PROMETHEUS_URL=http://${LOCALIPADDR}:9090
-# Log Search Setting
-#LOGSEARCH_QUERY_AUTH_TOKEN=<<Token>>
-#CONSOLE_LOG_QUERY_URL=http://localhost:Port
-
-EOT
 fi
 
-( cd /etc/systemd/system/; curl -O https://raw.githubusercontent.com/minio/console/master/systemd/console.service )
-sed -i -e 's/console-user/root/g' /etc/systemd/system/console.service
-systemctl enable --now console.service
-systemctl status console.service --no-pager
-fi
-
+mc admin info local/
 echo ""
 echo "*************************************************************************************"
-echo "minio server is ${MINIO_ENDPOINT}"
+echo "Minio API endpoint is ${MINIO_ENDPOINT}"
+echo "MINIO_ROOT_USER=${MINIO_ROOT_USER}"
+echo "MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}"
+echo "Minio console is https://${LOCALIPADDR}:9001"
 echo "username: ${MINIO_ROOT_USER}"
 echo "password: ${MINIO_ROOT_PASSWORD}"
-echo "minio console is http://${LOCALIPADDR}:9091"
-echo "Access key is console"
-echo "Secret key is ${MINIOSECRETKEY}" 
 echo "minio and mc was installed and configured successfully"
-echo "You can open http://${LOCALIPADDR}:9091 with web browser. You will see Minio Console (not Minio Browser" 
+echo ""
+echo "*************************************************************************************"
 echo "Next Step"
-echo "Execute in this console or re-login if you want to use mc completion"
 echo "source /etc/bash_completion.d/mc.sh"
-echo "For Test:"
-echo "mc mb --with-lock local/test01"
+echo "How to configure client at remote host:"
+echo "Copy cert file to ~/.mc/cert/CA/"
+echo "mc alias set Alias_Name ${MINIO_ENDPOINT} ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} --api S3v4"
+echo "How to create immutable bucket:"
+echo "mc mb --with-lock local/Bucket_Name"
 echo "mc ls local/"
-
-chmod -x ./0-minio-lnx.sh
+cd ${BASEPWD}
+chmod -x 0-minio-lnx.sh
