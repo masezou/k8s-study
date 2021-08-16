@@ -24,7 +24,7 @@ If you are using ESX VM and you would like to test CNI,Loadbalancer, Ingress, yo
 
 # Installation
 
-Configure your clone with sshkey then git clone this.
+Configure your clone with ssh key then git clone this.
 
 
 # Usage (Linux)
