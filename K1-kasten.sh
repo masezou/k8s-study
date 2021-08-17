@@ -57,7 +57,7 @@ echo ${LOCALIPADDR}
 apt -y install apache2-utils
 
 # Install K10-tools
-TOOLSVER=4.0.9
+TOOLSVER=4.0.10
 if [ ! -f /usr/local/bin/k10tools ]; then
 curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${ARCH}
 mv k10tools_${TOOLSVER}_linux_${ARCH} /usr/local/bin/k10tools
@@ -71,7 +71,7 @@ chmod +x /usr/local/bin/k10multicluster
 fi
 
 if [ ${ARCH} = "amd64" ]; then
-KUBESTRVER=0.4.17
+KUBESTRVER=0.4.18
 if [ ! -f /usr/local/bin/kubestr ]; then
 mkdir temp
 cd temp
