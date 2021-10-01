@@ -109,9 +109,16 @@ if [  -f /usr/local/bin/kind ]; then
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
 
-cat <<EOF | kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s --config=-
+K8SVER=v1.21.1
+cat <<EOF | kind create cluster --name k10-demo --image kindest/node:${K8SVER} --wait 600s --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+featureGates:
+  # any feature gate can be enabled here with "Name": true
+  # or disabled here with "Name": false
+  # not all feature gates are tested, however
+  "CSIMigration": true
+  "CSIMigrationvSphere": true
 containerdConfigPatches:
 - |-
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
