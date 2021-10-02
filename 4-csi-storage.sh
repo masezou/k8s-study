@@ -64,6 +64,7 @@ mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 kubectl get all -A
 kubectl get sc
 kubectl get VolumeSnapshotClass
+kubectl api-resources | grep -E "^Name|csi|storage|PersistentVolume"
 
 echo ""
 echo "*************************************************************************************"
