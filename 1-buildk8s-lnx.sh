@@ -117,7 +117,7 @@ featureGates:
   # any feature gate can be enabled here with "Name": true
   # or disabled here with "Name": false
   # not all feature gates are tested, however
-  "CSIMigration": true
+  #"CSIMigration": true
   "CSIMigrationvSphere": true
 containerdConfigPatches:
 - |-
