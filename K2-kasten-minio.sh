@@ -22,6 +22,14 @@ echo ${LOCALIPADDR}
 MINIOIP=${LOCALIPADDR}
 BUCKETNAME=`hostname`
 
+if [ ! -f /usr/local/bin/mc ]; then
+curl -OL https://dl.min.io/client/mc/release/linux-${ARCH}/mc
+mv mc /usr/local/bin/
+chmod +x /usr/local/bin/mc
+echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
+/usr/local/bin/mc >/dev/null
+fi
+
 mc alias rm local
 MINIO_ENDPOINT=https://${MINIOIP}:9000
 mc alias set local ${MINIO_ENDPOINT} minioadminuser minioadminuser --api S3v4
@@ -67,7 +75,7 @@ spec:
 EOF
 sleep 10
 kubectl -n kasten-io get profiles.config.kio.kasten.io
-oecho ""
+echo ""
 echo "Minio was configured"
 echo ""
 
