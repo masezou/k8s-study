@@ -15,10 +15,18 @@ else
   fi
 fi
 echo ${LOCALIPADDR}
-# Configure local minio
 
+#MINIOIP=192.168.1.130
+#MINIOIP=192.168.10.4
+#BUCKETNAME=kastenbackup-multi1
+MINIOIP=${LOCALIPADDR}
+BUCKETNAME=`hostname`
 
+mc alias rm local
+MINIO_ENDPOINT=https://${MINIOIP}:9000
+mc alias set local ${MINIO_ENDPOINT} minioadminuser minioadminuser --api S3v4
 
+# Configure local minio setup
 AWS_ACCESS_KEY_ID=` echo -n "minioadminuser" | base64`
 AWS_SECRET_ACCESS_KEY_ID=` echo -n "minioadminuser" | base64`
 
@@ -33,7 +41,7 @@ metadata:
   namespace: kasten-io
 type: secrets.kanister.io/aws
 EOF
-cat << EOF | kubectl -n kasten-io create -f -
+cat <<EOF | kubectl -n kasten-io create -f -
 apiVersion: config.kio.kasten.io/v1alpha1
 kind: Profile
 metadata:
@@ -51,12 +59,16 @@ spec:
         namespace: kasten-io
     type: ObjectStore
     objectStore:
-      name: miniobucket
+      name: ${BUCKETNAME}
       objectStoreType: S3
-      endpoint: 'https://${LOCALIPADDR}:9000'
+      endpoint: 'https://${MINIOIP}:9000'
       skipSSLVerify: true
       region: us-east-1
 EOF
-sleep 5
+sleep 10
 kubectl -n kasten-io get profiles.config.kio.kasten.io
+oecho ""
+echo "Minio was configured"
+echo ""
 
+chmod -x ./K2-kasten-minio.sh
