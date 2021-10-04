@@ -37,31 +37,6 @@ fi
 
 #########################################################
 
-# Install kubectx and kubens
-KUBECTX=0.9.4
-if [ ! -f /usr/local/bin/kubectx ]; then
-if [ ${ARCH} = amd64 ]; then
-	ARCH=x86_64
-fi
-curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
-tar xfz kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
-mv kubectx /usr/local/bin/
-chmod +x /usr/local/bin/kubectx
-rm -rf LICENSE kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
-curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubectx.bash
-mv kubectx.bash /etc/bash_completion.d/
-source /etc/bash_completion.d/kubectx.bash
-curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
-tar xfz kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
-mv kubens /usr/local/bin/
-chmod +x /usr/local/bin/kubens
-curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubens.bash
-mv kubens.bash /etc/bash_completion.d/
-source /etc/bash_completion.d/kubens.bash
-rm -rf LICENSE kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
-apt -y install fzf
-fi
-
 # Install kubecolor
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
@@ -105,6 +80,31 @@ mv mc /usr/local/bin/
 chmod +x /usr/local/bin/mc
 echo "complete -C /usr/local/bin/mc mc" > /etc/bash_completion.d/mc.sh
 /usr/local/bin/mc >/dev/null
+fi
+
+# Install kubectx and kubens
+KUBECTX=0.9.4
+if [ ! -f /usr/local/bin/kubectx ]; then
+if [ ${ARCH} = amd64 ]; then
+	ARCH=x86_64
+fi
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
+tar xfz kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
+mv kubectx /usr/local/bin/
+chmod +x /usr/local/bin/kubectx
+rm -rf LICENSE kubectx_v${KUBECTX}_linux_${ARCH}.tar.gz
+curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubectx.bash
+mv kubectx.bash /etc/bash_completion.d/
+source /etc/bash_completion.d/kubectx.bash
+curl -OL https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX}/kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
+tar xfz kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
+mv kubens /usr/local/bin/
+chmod +x /usr/local/bin/kubens
+curl -OL https://raw.githubusercontent.com/ahmetb/kubectx/master/completion/kubens.bash
+mv kubens.bash /etc/bash_completion.d/
+source /etc/bash_completion.d/kubens.bash
+rm -rf LICENSE kubens_v${KUBECTX}_linux_${ARCH}.tar.gz
+apt -y install fzf
 fi
 
 # Misc
