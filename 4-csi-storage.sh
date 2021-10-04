@@ -38,7 +38,7 @@ fi
 #########################################################
 BASEPWD=`pwd`
 
-SNAPSHOTTER_VERSION=v4.1.1
+SNAPSHOTTER_VERSION=v4.2.1
 
 # Apply VolumeSnapshot CRDs
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${SNAPSHOTTER_VERSION}/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
