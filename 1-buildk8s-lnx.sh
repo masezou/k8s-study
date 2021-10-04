@@ -190,6 +190,10 @@ source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
 
+kubectl label node k10-demo-worker node-role.kubernetes.io/worker=worker
+kubectl label node k10-demo-worker2 node-role.kubernetes.io/worker=worker
+kubectl label node k10-demo-worker3 node-role.kubernetes.io/worker=worker
+
 # Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
 cat <<EOF | kubectl apply -f -
