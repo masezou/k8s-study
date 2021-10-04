@@ -156,7 +156,7 @@ echo "Confirm kasten is running with kubectl get pods --namespace kasten-io"
 echo "kubectl --namespace kasten-io port-forward --address 0.0.0.0 service/gateway 8080:8000"
 echo "Open your browser http://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
-echo "Open http://${EXTERNALIP}/10 from local browser"
+echo "Open http://${EXTERNALIP}/K10/# from local browser"
 echo "then input login token"
 echo "Note:"
 echo 
