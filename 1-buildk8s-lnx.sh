@@ -68,8 +68,25 @@ uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
 	if [ ! -f /usr/bin/docker ]; then
-	apt -y install docker.io
-	systemctl enable --now docker
+    DOCKERVER="5:20.10.8~3-0~ubuntu-focal"
+    apt -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common nfs-kernel-server
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    apt-key fingerprint 0EBFCD88
+     if [ ${ARCH} = amd64 ]; then
+        add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+     elif [ ${ARCH} = arm64 ]; then
+        add-apt-repository  "deb [arch=arm64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+    else
+        echo "${ARCH} platform is not supported"
+        exit 1
+     fi
+    apt update
+    apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER}
+    apt-mark hold docker-ce-cli docker-ce
+    groupadd docker
+    systemctl enable docker
+    systemctl daemon-reload
+    systemctl restart docker
     fi
     KINDVER=0.11.1
 	if [ ! -f /usr/local/bin/kind ]; then
