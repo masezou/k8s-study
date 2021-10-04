@@ -126,6 +126,7 @@ if [  -f /usr/local/bin/kind ]; then
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
+#kind create cluster --name k10-demo --image kindest/node:v1.22.0 --wait 600s
 
 K8SVER=v1.21.1
 cat <<EOF | kind create cluster --name k10-demo --image kindest/node:${K8SVER} --wait 600s --config=-
