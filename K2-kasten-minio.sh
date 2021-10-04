@@ -1,5 +1,21 @@
 #!/usr/bin/env bash
 
+### ARCH Check ###
+PARCH=`arch`
+if [ ${PARCH} = aarch64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = arm64 ]; then
+  ARCH=arm64
+  echo ${ARCH}
+elif [ ${PARCH} = x86_64 ]; then
+  ARCH=amd64
+  echo ${ARCH}
+else
+  echo "${ARCH} platform is not supported"
+  exit 1
+fi
+
 #### LOCALIP #########
 ip address show ens160 >/dev/null
 retval=$?
