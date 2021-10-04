@@ -76,10 +76,11 @@ if [ ${KENELRTVL} != 0 ]; then
         add-apt-repository  "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
      elif [ ${ARCH} = arm64 ]; then
         add-apt-repository  "deb [arch=arm64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-    else
+     else
         echo "${ARCH} platform is not supported"
         exit 1
      fi
+    apt -y purge docker
     apt update
     apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER}
     apt-mark hold docker-ce-cli docker-ce
