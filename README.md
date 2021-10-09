@@ -4,7 +4,7 @@ This is sample KIND deployment. This project might not maintenance for now.
 
 ![image](https://user-images.githubusercontent.com/624501/126793662-60815904-cb7c-4897-a26c-cc6a684916dc.png)
 
-![image](https://user-images.githubusercontent.com/624501/126793807-ea1e6df2-9072-483b-8bbd-c695baf81c18.png)
+![image](https://user-images.githubusercontent.com/624501/136640568-0594cdcf-667e-4b85-bd6c-885065ef2f7c.png)
 
 # Features
 
