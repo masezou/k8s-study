@@ -122,4 +122,4 @@ echo ""
 echo "Pre-defined blueprints were configured"
 echo ""
 
-chmod -x ./K3-kasten-blueprint.sh
+chmod -x ./K4-kasten-blueprint.sh
