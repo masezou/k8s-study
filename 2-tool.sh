@@ -112,6 +112,7 @@ apt -y install postgresql-contrib postgresql-client mysql-client jq lynx
 systemctl stop postgresql
 systemctl disable postgresql
 
+exit
 echo ""
 echo "*************************************************************************************"
 echo "Next Step"
