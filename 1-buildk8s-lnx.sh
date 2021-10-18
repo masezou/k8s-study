@@ -192,7 +192,7 @@ source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
 
-kubectl label node k10-demo-worker node-role.kubernetes.io/worker=worker
+kubectl label node k10-demo-worker1 node-role.kubernetes.io/worker=worker
 kubectl label node k10-demo-worker2 node-role.kubernetes.io/worker=worker
 kubectl label node k10-demo-worker3 node-role.kubernetes.io/worker=worker
 
