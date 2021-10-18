@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+### Install command check ####
+if type "kubectl" > /dev/null 2>&1
+then
+    echo "kubectl was already installed"
+else
+    echo "kubectl was not found. Please install helm and re-run"
+    exit 255
+fi
+
 #### LOCALIP #########
 ip address show ens160 >/dev/null
 retval=$?
