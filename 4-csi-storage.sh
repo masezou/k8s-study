@@ -91,7 +91,7 @@ NFSPATH=/k8s_share
 
 kubectl -n kube-system create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/nfs-provisioner/nfs-server.yaml
 curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master --
-wget  https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/storageclass-nfs.yaml
+curl -OL  https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/storageclass-nfs.yaml
 sed -i -e "s/nfs-server.default.svc.cluster.local/${NFSSVR}/g" storageclass-nfs.yaml
 sed -i -e "s@share: /@share: ${NFSPATH}@g" storageclass-nfs.yaml
 kubectl create -f storageclass-nfs.yaml
