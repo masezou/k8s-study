@@ -16,9 +16,6 @@ else
 fi
 echo ${LOCALIPADDR}
 
-#MINIOIP=192.168.1.130
-#MINIOIP=192.168.10.4
-#BUCKETNAME=kastenbackup-multi1
 MINIOIP=${LOCALIPADDR}
 BUCKETNAME=`hostname`
 
@@ -66,6 +63,25 @@ spec:
       region: us-east-1
 EOF
 sleep 10
+
+kubectl -n kasten-io get pvc | grep kastennfspvc01
+retval1=$?
+if [ ${retval1} -eq 0 ]; then
+cat <<EOF | kubectl -n kasten-io create -f -
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Profile
+metadata:
+  name: nfs-profile
+  namespace: kasten-io
+spec:
+  type: Location
+  locationSpec:
+    type: FileStore
+    fileStore:
+      claimName: kastennfspvc01
+EOF
+fi
+
 kubectl -n kasten-io get profiles.config.kio.kasten.io
 echo ""
 echo "Minio was configured"

@@ -146,7 +146,7 @@ cat <<EOF | kubectl apply -n kasten-io -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-   name: ${KASTENNFSPVC}
+   name: kastennfspvc01
 spec:
    storageClassName: nfs-csi
    accessModes:

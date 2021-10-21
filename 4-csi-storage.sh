@@ -86,6 +86,9 @@ systemctl enable nfs-server
 showmount -e
 
 ##Install NFS-CSI
+NFSSVR=${LOCALIPADDR}
+NFSPATH=/k8s_share
+
 kubectl -n kube-system create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/nfs-provisioner/nfs-server.yaml
 curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master --
 wget  https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/storageclass-nfs.yaml
