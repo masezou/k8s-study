@@ -144,7 +144,7 @@ fi
 echo "export OCTANT_LISTENER_ADDR=0.0.0.0:8090" >> /etc/profile
 
 # Misc
-apt -y install postgresql-contrib postgresql-client mysql-client jq lynx
+apt -y install postgresql-contrib postgresql-client mysql-client mongodb-clients jq lynx
 systemctl stop postgresql
 systemctl disable postgresql
 
