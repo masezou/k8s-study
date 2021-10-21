@@ -63,6 +63,9 @@ echo ${LOCALIPADDR}
 
 #########################################################
 
+apt update
+apt -y upgrade
+
 # Install Kind
 uname -r | grep Microsoft
 KENELRTVL=$?
