@@ -139,14 +139,14 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set ingress.create=true
 
 # define NFS storage
-kubectl get csidrivers.storage.k8s.io | grep nfs
-retval4=$?
-if [ ${retval4} -eq 0 ]; then
+kubectl get sc | grep default | grep nfs-csi
+retval7=$?
+if [ ${retval7} -eq 0 ]; then
 cat <<EOF | kubectl apply -n kasten-io -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-   name: kastenbackup-pvc
+   name: ${KASTENNFSPVC}
 spec:
    storageClassName: nfs-csi
    accessModes:

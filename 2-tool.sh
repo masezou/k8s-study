@@ -37,6 +37,8 @@ fi
 
 #########################################################
 
+BASEPWD=`pwd`
+
 # Install kubecolor
 if [ ! -f /usr/bin/go ]; then
 apt -y install golang-go
@@ -152,4 +154,5 @@ echo "Next Step"
 echo "Kubernetes tools was installed in Ubuntu"
 echo "please re-login again"
 
+cd ${BASEPWD}
 chmod -x ./2-tool.sh

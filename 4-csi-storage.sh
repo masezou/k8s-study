@@ -71,6 +71,47 @@ kubectl patch storageclass standard \
 cd ..
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 
+
+# NFS Storage
+apt -y install nfs-kernel-server
+mkdir -p /k8s_share
+chmod -R 777 /k8s_share
+cat << EOF >> /etc/exports
+/k8s_share 192.168.0.0/16(rw,async,no_root_squash)
+/k8s_share 172.16.0.0/12(rw,async,no_root_squash)
+/k8s_share 10.0.0.0/8(rw,async,no_root_squash)
+EOF
+systemctl restart nfs-server
+systemctl enable nfs-server
+showmount -e
+
+##Install NFS-CSI
+kubectl -n kube-system create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/nfs-provisioner/nfs-server.yaml
+curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master --
+wget  https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/storageclass-nfs.yaml
+sed -i -e "s/nfs-server.default.svc.cluster.local/${NFSSVR}/g" storageclass-nfs.yaml
+sed -i -e "s@share: /@share: ${NFSPATH}@g" storageclass-nfs.yaml
+kubectl create -f storageclass-nfs.yaml
+kubectl patch storageclass nfs-csi -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+kubectl -n kube-system get pod -o wide -l app=csi-nfs-controller
+kubectl -n kube-system get pod -o wide -l app=csi-nfs-node
+
+#FSgroup Support from 1.20
+#https://kubernetes-csi.github.io/docs/support-fsgroup.html
+kubectl delete CSIDriver nfs.csi.k8s.io
+cat <<EOF | kubectl create -f -
+apiVersion: storage.k8s.io/v1beta1
+kind: CSIDriver
+metadata:
+  name: nfs.csi.k8s.io
+spec:
+  attachRequired: false
+  volumeLifecycleModes:
+    - Persistent
+  fsGroupPolicy: File
+EOF
+
+
 kubectl get all -A
 kubectl get sc
 kubectl get VolumeSnapshotClass
