@@ -25,7 +25,7 @@ retvalvga=$?
 
 if [ ${retvalvga} -eq 0 ]; then
  # VMware VM
- apt -y xserver-xorg-video-vmware xserver-xorg-input-all x11-common x11-xkb-utils x11-xserver-utils dbus-x11
+ apt -y install xserver-xorg-video-vmware xserver-xorg-input-all x11-common x11-xkb-utils x11-xserver-utils dbus-x11
  apt -y --no-install-recommends install xinit gdm3 gnome-session gnome-terminal gnome-control-center fonts-takao fonts-ipafont fonts-ipaexfont firefox
  apt -y install open-vm-tools-desktop
  systemctl enable open-vm-tools.service
