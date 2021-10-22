@@ -43,3 +43,4 @@ fc-cache -fv
 echo "export LIBGL_ALWAYS_INDIRECT=1" > /etc/profile.d/remotex.sh
 apt clean
 init 5
+runlevel
