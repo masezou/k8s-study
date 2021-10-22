@@ -106,16 +106,9 @@ helm repo add kasten https://charts.kasten.io/
 helm repo update
 
 kubectl get volumesnapshotclass | grep csi-hostpath-snapclass
-retval2=$?
-if [ ${retval2} -eq 0 ]; then
-kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
-    k10.kasten.io/is-snapshot-class=true
-fi
-
-kubectl get volumesnapshotclass | grep csi-rbdplugin-snapclass
-retval3=$?
+retvals3=$?
 if [ ${retval3} -eq 0 ]; then
-kubectl annotate volumesnapshotclass csi-rbdplugin-snapclass \
+kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
     k10.kasten.io/is-snapshot-class=true
 fi
 
@@ -140,8 +133,8 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 
 # define NFS storage
 kubectl get sc | grep nfs-csi
-retval7=$?
-if [ ${retval7} -eq 0 ]; then
+retval4=$?
+if [ ${retval4} -eq 0 ]; then
 cat <<EOF | kubectl apply -n kasten-io -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
