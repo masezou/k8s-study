@@ -87,4 +87,4 @@ echo ""
 echo "Minio was configured"
 echo ""
 
-chmod -x ./K2-kasten-minio.sh
+chmod -x ./K2-kasten-storage.sh

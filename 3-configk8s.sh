@@ -95,6 +95,13 @@ EOF
 # metric server
 # kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 # Modified componets.yaml
+curl -OL https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+cat << EOF | sed -i -e "/        imagePullPolicy: IfNotPresent$/r /dev/stdin" components.yaml
+        command:
+        - /metrics-server
+        -  --kubelet-insecure-tls
+        -  --kubelet-preferred-address-types=InternalIP
+EOF
 kubectl apply -f components.yaml
 
 # Kuberntes Dashboard
