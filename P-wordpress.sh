@@ -11,9 +11,9 @@ fi
 
 if type "helm" > /dev/null 2>&1
 then
-    echo "helm was not found. Please install helm and re-run"
+    echo "helm was already installed"
 else
-    echo "helm was not found"
+    echo "helm was not found. Please install helm and re-run"
     exit 255
 fi
 
