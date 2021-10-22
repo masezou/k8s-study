@@ -139,7 +139,7 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set ingress.create=true
 
 # define NFS storage
-kubectl get sc | grep default | grep nfs-csi
+kubectl get sc | grep nfs-csi
 retval7=$?
 if [ ${retval7} -eq 0 ]; then
 cat <<EOF | kubectl apply -n kasten-io -f -
