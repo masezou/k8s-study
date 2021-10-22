@@ -118,6 +118,8 @@ actions:
           mongo --authenticationDatabase admin -u root -p "${MONGODB_ROOT_PASSWORD}" --eval="db.fsyncUnlock()"
 EOF
 
+kubectl -n kasten-io get blueprint
+
 echo ""
 echo "Pre-defined blueprints were configured"
 echo ""
