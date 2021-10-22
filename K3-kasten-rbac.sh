@@ -49,3 +49,4 @@ kubectl get serviceaccounts backupview -o yaml
 
 kubectl create clusterrolebinding backupview-rolebinding --clusterrole=k10-config-view  --serviceaccount=default:backupview
 
+chmod -x ./K3-kasten-rbac.sh
