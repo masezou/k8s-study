@@ -129,62 +129,6 @@ spec:
   fsGroupPolicy: File
 EOF
 
-
-# SMB Storage
-apt -y install samba
-mkdir -p /disk/share
-chmod 777 /disk/share
-cat << EOF >>/etc/samba/smb.conf
-[Share]
-   path = /disk/share
-   writable = yes
-   guest ok = yes
-   guest only = yes
-   force create mode = 777
-   force directory mode = 777
-EOF
-systemctl restart smbd
-echo "SMB server was configured"
-
-##Install SMB-CSI
-SMBUSERNAME=administrator
-SMBPASSWORD=Password00!
-SMBSERVER=${LOCALIPADDR}
-SMBPATH=Share
-
-SMBCSIVER=1.3.0
-curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/v${SMBCSIVER}/deploy/install-driver.sh | bash -s v${SMBCSIVER} --
-kubectl create secret generic smbcreds --from-literal username=${SMBUSERNAME} --from-literal password="${SMBPASSWORD}"
-
-cat << EOF | kubectl create -f -
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: smb
-provisioner: smb.csi.k8s.io
-parameters:
-  source: "//${SMBSERVER}/${SMBPATH}"
-  # if csi.storage.k8s.io/provisioner-secret is provided, will create a sub directory
-  # with PV name under source
-  csi.storage.k8s.io/provisioner-secret-name: "smbcreds"
-  csi.storage.k8s.io/provisioner-secret-namespace: "default"
-  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
-  csi.storage.k8s.io/node-stage-secret-namespace: "default"
-reclaimPolicy: Delete  # available values: Delete, Retain
-volumeBindingMode: Immediate
-mountOptions:
-  - dir_mode=0777
-  - file_mode=0777
-  - uid=1001
-  - gid=1001
-  - vers=3.0
-EOF
-kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/deploy/example/statefulset.yaml
-kubectl exec -it statefulset-smb-0 -- df -h
-
-kubectl patch storageclass smb -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-
-
 kubectl get all -A
 kubectl get sc
 kubectl get VolumeSnapshotClass
