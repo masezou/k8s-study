@@ -84,7 +84,7 @@ fi
 
 kubectl -n kasten-io get profiles.config.kio.kasten.io
 echo ""
-echo "Minio was configured"
+echo "Kasten backup storage were configured"
 echo ""
 
 chmod -x ./K2-kasten-storage.sh
