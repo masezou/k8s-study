@@ -103,6 +103,7 @@ cat << EOF | sed -i -e "/        imagePullPolicy: IfNotPresent$/r /dev/stdin" co
         -  --kubelet-preferred-address-types=InternalIP
 EOF
 kubectl apply -f components.yaml
+rm -rf components.yaml
 
 # Kuberntes Dashboard
 
