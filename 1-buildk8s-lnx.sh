@@ -71,7 +71,7 @@ uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
 	if [ ! -f /usr/bin/docker ]; then
-    DOCKERVER="5:20.10.8~3-0~ubuntu-focal"
+    DOCKERVER="5:20.10.9~3-0~ubuntu-focal"
     apt -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common nfs-kernel-server smbclient cifs-utils
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     apt-key fingerprint 0EBFCD88
