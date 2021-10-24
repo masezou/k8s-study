@@ -128,7 +128,8 @@ helm install k10 kasten/k10 --namespace=kasten-io \
 --set global.persistence.storageClass=csi-hostpath-sc \
 --set auth.tokenAuth.enabled=true \
 --set externalGateway.create=true \
---set ingress.create=true
+--set ingress.create=true \
+--set grafana.enabled=true
 ##--set injectKanisterSidecar.enabled=true \
 
 # define NFS storage
@@ -168,7 +169,8 @@ echo "Open your browser http://${LOCALIPADDR}:8080/k10/#/"
 echo "or"
 echo "Open http://${EXTERNALIP}/K10/# from local browser"
 echo "then input login token"
-echo "Note:"
+echo "kubectl -n kasten-io port-forward service/k10-grafana --address 0.0.0.0 8111:80"
+echo "Access http://Node IP Address:8111/"
 echo 
 
 else
