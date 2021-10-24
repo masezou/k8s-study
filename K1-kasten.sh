@@ -106,7 +106,7 @@ helm repo add kasten https://charts.kasten.io/
 helm repo update
 
 kubectl get volumesnapshotclass | grep csi-hostpath-snapclass
-retvals3=$?
+retval3=$?
 if [ ${retval3} -eq 0 ]; then
 kubectl annotate volumesnapshotclass csi-hostpath-snapclass \
     k10.kasten.io/is-snapshot-class=true
