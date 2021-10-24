@@ -87,23 +87,27 @@ kubectl patch storageclass standard \
 cd ..
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 
+# Device /dev/sdb check
+if [ ! -b /dev/sdb ]; then
+echo "/dev/sdb does't exist. end..."
+exit 255
+fi
+
+# create /disk
+parted /dev/sdb  --script 'mklabel gpt mkpart primary 0% 100% print quit'
+mkfs.xfs -b size=4096 -m crc=1,reflink=1 /dev/sdb1
+mkdir -p /disk
+echo "/dev/sdb1       /disk  xfs     defaults 0 0" >>/etc/fstab
+mount -a
+
+echo "/disk was configured"
 
 # NFS Storage
 apt -y install nfs-kernel-server
-mkdir -p /k8s_share
-chmod -R 1777 /k8s_share
-cat << EOF >> /etc/exports
-/k8s_share 192.168.0.0/16(rw,async,no_root_squash)
-/k8s_share 172.16.0.0/12(rw,async,no_root_squash)
-/k8s_share 10.0.0.0/8(rw,async,no_root_squash)
-EOF
-systemctl restart nfs-server
-systemctl enable nfs-server
-showmount -e
 
 ##Install NFS-CSI
 NFSSVR=${LOCALIPADDR}
-NFSPATH=/k8s_share
+NFSPATH=/disk/k8s_share
 
 kubectl -n kube-system create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/example/nfs-provisioner/nfs-server.yaml
 curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/deploy/install-driver.sh | bash -s master --
@@ -129,6 +133,45 @@ spec:
     - Persistent
   fsGroupPolicy: File
 EOF
+
+
+
+##Install SMB-CSI
+SMBUSERNAME=administrator
+SMBPASSWORD=Password00!
+SMBSERVER=${LOCALIPADDR}
+SMBPATH=Share
+SMBCSIVER=1.3.0
+curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/v${SMBCSIVER}/deploy/install-driver.sh | bash -s v${SMBCSIVER} --
+kubectl create secret generic smbcreds --from-literal username=${SMBUSERNAME} --from-literal password="${SMBPASSWORD}"
+
+cat << EOF | kubectl create -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: smb
+provisioner: smb.csi.k8s.io
+parameters:
+  source: "//${SMBSERVER}/${SMBPATH}"
+  # if csi.storage.k8s.io/provisioner-secret is provided, will create a sub directory
+  # with PV name under source
+  csi.storage.k8s.io/provisioner-secret-name: "smbcreds"
+  csi.storage.k8s.io/provisioner-secret-namespace: "default"
+  csi.storage.k8s.io/node-stage-secret-name: "smbcreds"
+  csi.storage.k8s.io/node-stage-secret-namespace: "default"
+reclaimPolicy: Delete  # available values: Delete, Retain
+volumeBindingMode: Immediate
+mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1001
+  - gid=1001
+  - vers=3.0
+EOF
+kubectl create -f https://raw.githubusercontent.com/kubernetes-csi/csi-driver-smb/master/deploy/example/statefulset.yaml
+kubectl exec -it statefulset-smb-0 -- df -h
+
+kubectl patch storageclass smb -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 
 
 kubectl get all -A
