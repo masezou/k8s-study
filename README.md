@@ -25,6 +25,9 @@ If you are using ESX VM and you would like to test CNI, Loadbalancer, When you c
  - KIND (https://kind.sigs.k8s.io/docs/user/quick-start/)
  - external Minio / NFS Server (Option).
 
+＃Network Diagram
+
+
 # Installation
 
 Configure your clone with ssh key then git clone this.
