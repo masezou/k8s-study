@@ -93,8 +93,8 @@ if [ ! -f /usr/local/bin/kubestr ]; then
 mkdir temp
 cd temp
 curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr_${KUBESTRVER}_Linuxs_-${ARCH}.tar.gz
-tar xfz kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
-rm kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
+tar xfz kubestr_${KUBESTRVER}_Linux_${ARCH}.tar.gz
+rm kubestr_${KUBESTRVER}_Linux_${ARCH}.tar.gz
 mv kubestr /usr/local/bin/kubestr
 chmod +x /usr/local/bin/kubestr
 cd ..
