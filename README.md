@@ -16,6 +16,9 @@ Kind deployment on Linux and Windows. This includes metallb and dashboard.
 
 If you are using ESX VM and you would like to test CNI, Loadbalancer, When you create VM, you can add VRAM, you can use Xwindow with high resolution.
 
+![image](https://user-images.githubusercontent.com/624501/138623690-7a01b69b-b6ec-4f98-b178-055e649612ba.png)
+
+
 -Windows 10 4vCPU 16GB RAM 50GB above
  - ubuntu Server 20.04 in MS Appstore 
  - Docker Desktop (https://hub.docker.com/editions/community/docker-ce-desktop-windows)
