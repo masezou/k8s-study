@@ -74,7 +74,7 @@ echo ${LOCALIPADDR}
 apt -y install apache2-utils
 
 # Install K10-tools
-TOOLSVER=4.0.13
+TOOLSVER=4.5.0
 if [ ! -f /usr/local/bin/k10tools ]; then
 curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${ARCH}
 mv k10tools_${TOOLSVER}_linux_${ARCH} /usr/local/bin/k10tools
