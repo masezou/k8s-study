@@ -88,7 +88,7 @@ chmod +x /usr/local/bin/k10multicluster
 fi
 
 if [ ${ARCH} = "amd64" ]; then
-KUBESTRVER=0.4.23
+KUBESTRVER=0.4.31
 if [ ! -f /usr/local/bin/kubestr ]; then
 mkdir temp
 cd temp
