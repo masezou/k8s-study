@@ -92,7 +92,7 @@ KUBESTRVER=0.4.31
 if [ ! -f /usr/local/bin/kubestr ]; then
 mkdir temp
 cd temp
-curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
+curl -OL https://github.com/kastenhq/kubestr/releases/download/v${KUBESTRVER}/kubestr_${KUBESTRVER}_linuxs_-${ARCH}.tar.gz
 tar xfz kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
 rm kubestr-v${KUBESTRVER}-linux-${ARCH}.tar.gz
 mv kubestr /usr/local/bin/kubestr
