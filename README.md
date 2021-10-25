@@ -34,7 +34,7 @@ Configure your clone with ssh key then git clone this.
 sudo -i
 git clone https://github.com/masezou/k8s-study
 cd k8s-study
-./0-minio-lnx.sh ; ./1-buildk8s-lnx.sh ; ./2-tool.sh ; ./3-configk8s.sh ; ./4-csi-storage.sh
+./0-minio-lnx.sh ; ./1-buildk8s-lnx.sh ; ./2-tool.sh ; ./3-configk8s.sh ; ./4-csi-storage.sh ; ./5-desktop.sh
 ```
 
 # Usage (Windows 10)
