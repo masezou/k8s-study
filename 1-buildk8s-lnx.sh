@@ -45,6 +45,14 @@ else
  exit 1
 fi  
 
+PHYSICALMEM=`free | grep Mem | awk '{ print $2*100 }'`
+echo ${PHYSICALMEM}
+  if [ ${PHYSICALMEM} -lt 1600000000 ]; then
+  echo "At least need to have 16GB Memory..."
+  echo "please shudown now and add memory, then try again!"
+  exit 255
+fi
+
 #### LOCALIP #########
 ip address show ens160 >/dev/null
 retval=$?
