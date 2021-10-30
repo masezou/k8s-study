@@ -150,7 +150,7 @@ featureGates:
   # or disabled here with "Name": false
   # not all feature gates are tested, however
   #"CSIMigration": true
-  "CSIMigrationvSphere": true
+  #"CSIMigrationvSphere": true
 containerdConfigPatches:
 - |-
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
