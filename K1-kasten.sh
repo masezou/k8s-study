@@ -75,14 +75,18 @@ apt -y install apache2-utils
 
 # Install K10-tools
 TOOLSVER=4.5.1
+rm -rf /usr/local/bin/k10tools
 if [ ! -f /usr/local/bin/k10tools ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${ARCH}
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10tools_${TOOLSVER}_linux_${ARCH}.tar.gz
+tar xfz k10tools_${TOOLSVER}_linux_${ARCH}.tar.gz
 mv k10tools_${TOOLSVER}_linux_${ARCH} /usr/local/bin/k10tools
 chmod +x /usr/local/bin/k10tools
 fi
 
+rm -rf /usr/local/bin/k10multicluster
 if [ ! -f /usr/local/bin/k10multicluster ]; then
-curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_linux_${ARCH}
+curl -OL https://github.com/kastenhq/external-tools/releases/download/${TOOLSVER}/k10multicluster_${TOOLSVER}_linux_${ARCH}.tar.gz
+tar xfz k10multicluster_${TOOLSVER}_linux_${ARCH}.tar.gz
 mv k10multicluster_${TOOLSVER}_linux_${ARCH}  /usr/local/bin/k10multicluster
 chmod +x /usr/local/bin/k10multicluster
 fi
