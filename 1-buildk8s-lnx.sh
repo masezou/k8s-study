@@ -96,7 +96,11 @@ if [ ${KENELRTVL} != 0 ]; then
     apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER}
     apt-mark hold docker-ce-cli docker-ce
     groupadd docker
-    #gpasswd -a $USER docker
+
+    for DOCKERUSER in `ls -1 /home | grep -v linuxbrew`; do
+      echo ${DOCKERUSER}
+      gpasswd -a ${DOCKERUSER} docker
+    done
     systemctl enable docker
     systemctl daemon-reload
     systemctl restart docker
