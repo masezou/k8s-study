@@ -93,8 +93,8 @@ if [ ${KENELRTVL} != 0 ]; then
      fi
     apt -y purge docker
     apt update
-    apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER}
-    apt-mark hold docker-ce-cli docker-ce
+    apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER} docker-ce-rootless-extras=${DOCKERVER}
+    apt-mark hold docker-ce-cli docker-ce docker-ce-rootless-extras
     groupadd docker
 
     for DOCKERUSER in `ls -1 /home | grep -v linuxbrew`; do
