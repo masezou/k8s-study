@@ -2,7 +2,7 @@
 
 MINIO_ROOT_USER=minioadminuser
 MINIO_ROOT_PASSWORD=minioadminuser
-LOCALHOSTNAME=`hostname`
+MINIOPATH=/minio
 
 #########################################################
 ### UID Check ###
@@ -59,8 +59,8 @@ echo ${LOCALIPADDR}
 BASEPWD=`pwd`
 
 if [ ! -f /usr/local/bin/minio ]; then
-mkdir -p /minio/data{1..4}
-chmod -R 755 /minio/data*
+mkdir -p ${MINIOPATH}/data{1..4}
+chmod -R 755 ${MINIOPATH}/data*
 mkdir -p ~/.minio/certs
 curl -OL https://dl.min.io/server/minio/release/linux-${ARCH}/minio
 mv minio  /usr/local/bin/
@@ -79,6 +79,7 @@ fi
 
 if [ ! -f /root/.minio/certs/public.crt ]; then
 cd /root/.minio/certs/
+LOCALHOSTNAME=`hostname`
 openssl genrsa -out private.key 2048
 cat <<EOF> openssl.conf
 [req]
@@ -115,7 +116,7 @@ if [ ! -f /etc/systemd/system/minio.service ]; then
 if [ ! -f /etc/default/minio ]; then
 cat <<EOT > /etc/default/minio
 # Volume to be used for MinIO server.
-MINIO_VOLUMES="/minio/data1 /minio/data2 /minio/data3 /minio/data4"
+MINIO_VOLUMES="${MINIOPATH}/data1 ${MINIOPATH}/data2 ${MINIOPATH}/data3 ${MINIOPATH}/data4"
 # Use if you want to run MinIO on a custom port.
 MINIO_OPTS="--address :9000 --console-address :9001"
 # Access Key of the server.
