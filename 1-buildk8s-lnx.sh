@@ -116,6 +116,7 @@ if [ ${KENELRTVL} != 0 ]; then
 fi
 
 #### Local Registry Contaner
+# create registry container unless it already exists
 reg_name='kind-registry'
 reg_port='5000'
 running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
@@ -155,10 +156,9 @@ featureGates:
   # not all feature gates are tested, however
   #"CSIMigration": true
   #"CSIMigrationvSphere": true
-containerdConfigPatches:
 - |-
-  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."${LOCALIPADDR}:${reg_port}"]
-    endpoint = ["http://${LOCALIPADDR}:${reg_port}"]
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
+    endpoint = ["http://${reg_name}:5000"]
 networking:
   # WARNING: It is _strongly_ recommended that you keep this the default
   # (127.0.0.1) for security reasons. However it is possible to change this.
@@ -208,10 +208,6 @@ source /etc/bash_completion.d/kubectl
 echo 'export KUBE_EDITOR=vi' >>~/.bashrc
 fi
 
-kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
-kubectl label node ${CLUSTERNAME}-worker1 node-role.kubernetes.io/worker=worker
-kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
-
 # Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
 cat <<EOF | kubectl apply -f -
@@ -222,26 +218,30 @@ metadata:
   namespace: kube-public
 data:
   localRegistryHosting.v1: |
-    host: "${LOCALIPADDR}:${reg_port}"
+    host: "localhost:${reg_port}"
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
 
-# Private registory frontend
+kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
+kubectl label node ${CLUSTERNAME}-worker1 node-role.kubernetes.io/worker=worker
+kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
+
+
 # Private Registry Front End
-echo "install private registry FE"
-cat << EOF > ~/config.yml
-registry:
-  # Docker registry url
-  url: http://${LOCALIPADDR}:5000/v2
-  # Docker registry fqdn
-  name: ${LOCALIPADDR}:5000
-  # To allow image delete, should be false
-  readonly: false
-  auth:
-    # Disable authentication
-    enabled: false
-EOF
-docker run -p 18082:8080 --name registry-web --link ${reg_name} -v ~/config.yml:/conf/config.yml:ro hyper/docker-registry-web &
+#echo "install private registry FE"
+#cat << EOF > ~/config.yml
+#registry:
+#  # Docker registry url
+#  url: http://${LOCALIPADDR}:5000/v2
+#  # Docker registry fqdn
+#  name: ${LOCALIPADDR}:5000
+#  # To allow image delete, should be false
+#  readonly: false
+#  auth:
+#    # Disable authentication
+#    enabled: false
+#EOF
+#docker run -p 18082:8080 --name registry-web --link ${reg_name} -v ~/config.yml:/conf/config.yml:ro hyper/docker-registry-web &
 #docker run -d --name repositoryfe -e ENV_DOCKER_REGISTRY_HOST=${LOCALIPADDR} -e ENV_DOCKER_REGISTRY_PORT=5000 -p 18082:80  ekazakov/docker-registry-frontend
 
 echo ""
