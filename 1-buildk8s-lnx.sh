@@ -134,7 +134,7 @@ fi
 
 #### Local Registry Contaner
 # create registry container unless it already exists
-mkdir /registry
+mkdir -p /registry
 reg_name='kind-registry'
 reg_port='5000'
 running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
@@ -230,20 +230,6 @@ fi
 
 
 # Private Registry Front End
-#echo "install private registry FE"
-#cat << EOF > ~/config.yml
-#registry:
-#  # Docker registry url
-#  url: http://${LOCALIPADDR}:5000/v2
-#  # Docker registry fqdn
-#  name: ${LOCALIPADDR}:5000
-#  # To allow image delete, should be false
-#  readonly: false
-#  auth:
-#    # Disable authentication
-#    enabled: false
-#EOF
-#docker run -p 18082:8080 --name registry-web --link ${reg_name} -v ~/config.yml:/conf/config.yml:ro hyper/docker-registry-web &
 #docker run -d --name repositoryfe -e ENV_DOCKER_REGISTRY_HOST=${LOCALIPADDR} -e ENV_DOCKER_REGISTRY_PORT=5000 -p 18082:80  ekazakov/docker-registry-frontend
 
 echo ""
