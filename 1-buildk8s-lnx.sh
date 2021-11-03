@@ -204,6 +204,9 @@ nodes:
     hostPort: 443
     protocol: TCP
 EOF
+kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
+kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
+kubectl label node ${CLUSTERNAME}-worker3 node-role.kubernetes.io/worker=worker
 
 # Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
@@ -223,10 +226,6 @@ sleep 10
 # connect the registry to the cluster network
 # (the network may already be connected)
 docker network connect "kind" "${reg_name}" || true
-
-kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
-kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
-kubectl label node ${CLUSTERNAME}-worker3 node-role.kubernetes.io/worker=worker
 fi
 
 
