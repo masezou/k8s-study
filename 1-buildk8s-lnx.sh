@@ -74,7 +74,7 @@ echo ${LOCALIPADDR}
 apt update
 apt -y upgrade
 
-# Install Kind
+# Install Docker and Kind
 uname -r | grep Microsoft
 KENELRTVL=$?
 if [ ${KENELRTVL} != 0 ]; then
@@ -115,6 +115,23 @@ if [ ${KENELRTVL} != 0 ]; then
 	fi
 fi
 
+# Install kubectl
+if [ ! -f /usr/bin/kubectl ]; then
+apt update
+apt -y install apt-transport-https gnupg2 curl
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+apt update
+KUBECTLVER=1.21.1-00
+apt -y install -qy kubectl=${KUBECTLVER}
+apt-mark hold kubectl
+kubectl completion bash >/etc/bash_completion.d/kubectl
+source /etc/bash_completion.d/kubectl
+echo 'export KUBE_EDITOR=vi' >>~/.bashrc
+fi
+
+
+
 #### Local Registry Contaner
 # create registry container unless it already exists
 reg_name='kind-registry'
@@ -140,7 +157,6 @@ if [  -f /usr/local/bin/kind ]; then
 #kind create cluster --name k10-demo --image kindest/node:v1.17.17 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.18.19 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
-#kind create cluster --name k10-demo --image kindest/node:v1.19.11 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.20.7 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.21.1 --wait 600s
 #kind create cluster --name k10-demo --image kindest/node:v1.22.0 --wait 600s
@@ -150,12 +166,13 @@ CLUSTERNAME=k10-demo
 cat <<EOF | kind create cluster --name ${CLUSTERNAME} --image kindest/node:${K8SVER} --wait 600s --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
-featureGates:
+#featureGates:
   # any feature gate can be enabled here with "Name": true
   # or disabled here with "Name": false
   # not all feature gates are tested, however
   #"CSIMigration": true
   #"CSIMigrationvSphere": true
+containerdConfigPatches:
 - |-
   [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:${reg_port}"]
     endpoint = ["http://${reg_name}:5000"]
@@ -166,7 +183,7 @@ networking:
   # By default the API server listens on a random open port.
   # You may choose a specific port but probably don't need to in most cases.
   # Using a random port makes it easier to spin up multiple clusters.
-  apiServerPort: 6443
+#  apiServerPort: 6443
 nodes:
 - role: control-plane
   kubeadmConfigPatches:
@@ -187,27 +204,6 @@ nodes:
     protocol: TCP
 EOF
 
-# connect the registry to the cluster network
-# (the network may already be connected)
-docker network connect "kind" "${reg_name}" || true
-fi
-
-
-# Install kubectl
-if [ ! -f /usr/bin/kubectl ]; then
-apt update
-apt -y install apt-transport-https gnupg2 curl
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
-apt update
-KUBECTLVER=1.21.1-00
-apt -y install -qy kubectl=${KUBECTLVER}
-apt-mark hold kubectl
-kubectl completion bash >/etc/bash_completion.d/kubectl
-source /etc/bash_completion.d/kubectl
-echo 'export KUBE_EDITOR=vi' >>~/.bashrc
-fi
-
 # Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
 cat <<EOF | kubectl apply -f -
@@ -222,9 +218,15 @@ data:
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
 
+sleep 10
+# connect the registry to the cluster network
+# (the network may already be connected)
+docker network connect "kind" "${reg_name}" || true
+
 kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
 kubectl label node ${CLUSTERNAME}-worker1 node-role.kubernetes.io/worker=worker
 kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
+fi
 
 
 # Private Registry Front End

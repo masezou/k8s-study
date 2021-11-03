@@ -136,6 +136,7 @@ cd ..
   mkdir -p $HOME/.config/octant/plugins/ 
   git clone --depth 1 git@github.com:vmware-tanzu/octant-plugin-for-kind.git
   cd octant-plugin-for-kind
+  apt -y install make
   make
   cp bin/octant-plugin-for-kind $HOME/.config/octant/plugins/
 
