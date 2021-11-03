@@ -225,8 +225,8 @@ sleep 10
 docker network connect "kind" "${reg_name}" || true
 
 kubectl label node ${CLUSTERNAME}-worker node-role.kubernetes.io/worker=worker
-kubectl label node ${CLUSTERNAME}-worker1 node-role.kubernetes.io/worker=worker
 kubectl label node ${CLUSTERNAME}-worker2 node-role.kubernetes.io/worker=worker
+kubectl label node ${CLUSTERNAME}-worker3 node-role.kubernetes.io/worker=worker
 fi
 
 
