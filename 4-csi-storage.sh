@@ -87,6 +87,9 @@ kubectl patch storageclass standard \
 cd ..
 mv csi-driver-host-path csi-driver-host-path-`date "+%Y%m%d_%H%M%S"`
 
+### Consider to apply...
+#chmod -R 1777 /var/lib/docker/volumes/
+
 # NFS Storage
 apt -y install nfs-kernel-server
 mkdir -p /disk/k8s_share
