@@ -91,7 +91,7 @@ if [ ${KENELRTVL} != 0 ]; then
         echo "${ARCH} platform is not supported"
         exit 1
      fi
-    apt -y purge docker
+    apt -y purge docker.io
     apt update
     apt -y install docker-ce-cli=${DOCKERVER} docker-ce=${DOCKERVER} docker-ce-rootless-extras=${DOCKERVER}
     apt-mark hold docker-ce-cli docker-ce docker-ce-rootless-extras
