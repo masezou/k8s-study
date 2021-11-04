@@ -59,8 +59,10 @@ echo ${LOCALIPADDR}
 BASEPWD=`pwd`
 
 if [ ! -f /usr/local/bin/minio ]; then
+if [ ! -d ${MINIOPATH} ]; then
 mkdir -p ${MINIOPATH}/data{1..4}
 chmod -R 755 ${MINIOPATH}/data*
+fi
 mkdir -p ~/.minio/certs
 curl -OL https://dl.min.io/server/minio/release/linux-${ARCH}/minio
 mv minio  /usr/local/bin/
