@@ -3,7 +3,7 @@
 This is sample KIND deployment. This project might not maintenance for now. 
 
 
-#***If you want to use this deployment, please use masezou/k8s-study-vanilla**
+# ***If you want to use this deployment, please use masezou/k8s-study-vanilla**
 
 ![image](https://user-images.githubusercontent.com/624501/126793662-60815904-cb7c-4897-a26c-cc6a684916dc.png)
 
