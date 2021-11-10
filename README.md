@@ -29,7 +29,7 @@ If you are using ESX VM and you would like to test CNI, Loadbalancer, When you c
  - external Minio / NFS Server (Option).
 
 # Network Diagram
-![Kind](https://user-images.githubusercontent.com/624501/140581204-673b5a2c-bd43-4260-b2ce-aef056d6b7dd.jpeg)
+![1-Kind](https://user-images.githubusercontent.com/624501/141036121-25293c25-1641-4ed2-b7a6-e3f694337c83.jpeg)
 
 
 # Installation
