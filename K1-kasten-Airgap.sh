@@ -74,7 +74,7 @@ echo ${LOCALIPADDR}
 apt -y install apache2-utils
 
 # Install K10-tools
-KASTENVER=4.5.1
+KASTENVER=4.5.2
 rm -rf /usr/local/bin/k10tools
 if [ ! -f /usr/local/bin/k10tools ]; then
 curl -OL https://github.com/kastenhq/external-tools/releases/download/${KASTENVER}/k10tools_${KASTENVER}_linux_${ARCH}.tar.gz

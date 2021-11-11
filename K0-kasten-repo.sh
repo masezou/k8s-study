@@ -54,7 +54,7 @@ fi
 
 #########################################################
 
-KASTENVER=4.5.1
+KASTENVER=4.5.2
 docker run --rm -it gcr.io/kasten-images/k10offline:${KASTENVER} list-images
 docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock \
     gcr.io/kasten-images/k10offline:${KASTENVER} pull images
